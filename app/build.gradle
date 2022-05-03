@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
 }
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdk 32
@@ -33,9 +35,9 @@ android {
     buildFeatures {
         dataBinding true
     }
-    dexOptions {
-        javaMaxHeapSize "4G"
-    }
+//    dexOptions {
+//        javaMaxHeapSize "4G"
+//    }
 }
 
 dependencies {
@@ -63,6 +65,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1"
 
-    implementation platform('com.google.firebase:firebase-bom:29.3.1')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+//    implementation platform('com.google.firebase:firebase-bom:29.3.1')
+//    implementation 'com.google.firebase:firebase-analytics-ktx'
 }

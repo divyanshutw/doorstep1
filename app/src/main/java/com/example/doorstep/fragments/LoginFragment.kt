@@ -1,60 +1,54 @@
 package com.example.doorstep.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import com.example.doorstep.R
+import com.example.doorstep.Scripts.auth.OtpAuthentication
+import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [LoginFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LoginFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
+    var auth: FirebaseAuth? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LoginFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LoginFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+        val view = inflater.inflate(R.layout.fragment_login, container, false)
+        val number = view.findViewById<EditText>(R.id.edittext_mobile)
+        auth = FirebaseAuth.getInstance()
+        val Submit = view.findViewById<Button>(R.id.button_getOtp)
+        val check = view.findViewById<Button>(R.id.button_checkOtp)
+        val otpAuthentication = arrayOfNulls<OtpAuthentication>(1)
+        val otp = view.findViewById<EditText>(R.id.edittext_otp)
+        Submit.setOnClickListener { view ->
+            otpAuthentication[0] = OtpAuthentication(requireActivity(), auth!!)
+            otpAuthentication[0]!!.getOtp(number.text.toString())
+            otpAuthentication[0]!!.setMyCustomListener { result ->
+                if (result) {
+                    ChangeUI(view)
                 }
             }
+        }
+        check.setOnClickListener { if (otp.text != null) otpAuthentication[0]!!.signIn(otp.text.toString()) }
+
+
+        // Inflate the layout for this fragment
+        return view
+    }
+
+    fun ChangeUI(view: View) {
+        val phoneNumberContainer = view.findViewById<LinearLayout>(R.id.phoneNumberContainer)
+        val otpContainer = view.findViewById<LinearLayout>(R.id.otpContainer)
+        phoneNumberContainer.visibility = View.INVISIBLE
+        otpContainer.visibility = View.VISIBLE
     }
 }

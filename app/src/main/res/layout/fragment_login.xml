@@ -26,7 +26,7 @@
 <!--        OTP and mobile number design-->
 
         <LinearLayout
-            android:id="@+id/otpContainer"
+            android:id="@+id/phoneNumberContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
@@ -50,6 +50,44 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_getOtp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_gradient_bg"
+                android:hint="@string/mobile_number"
+                android:inputType="phone"
+                android:padding="8dp"
+                android:layout_marginTop="16dp"/>
+
+        </LinearLayout>
+
+<!--Otp Container-->
+
+        <LinearLayout
+            android:id="@+id/otpContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_corner_bg"
+            android:orientation="vertical"
+            android:elevation="16dp"
+            android:padding="16dp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logo">
+
+            <EditText
+                android:id="@+id/edittext_otp"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/edittext_round"
+                android:hint="OTP"
+                android:inputType="phone"
+                android:padding="8dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_checkOtp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_gradient_bg"

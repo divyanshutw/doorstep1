@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -56,6 +59,25 @@ class LoginFragment : Fragment() {
 
         googleSignIn();
         auth = Firebase.auth
+
+        val view = inflater.inflate(R.layout.fragment_login, container, false)
+        val number = view.findViewById<EditText>(R.id.edittext_mobile)
+        auth = FirebaseAuth.getInstance()
+        val Submit = view.findViewById<Button>(R.id.button_getOtp)
+        val check = view.findViewById<Button>(R.id.button_checkOtp)
+        val otpAuthentication = arrayOfNulls<OtpAuthentication>(1)
+        val otp = view.findViewById<EditText>(R.id.edittext_otp)
+        Submit.setOnClickListener { view ->
+            otpAuthentication[0] = OtpAuthentication(requireActivity(), auth!!)
+            otpAuthentication[0]!!.getOtp(number.text.toString())
+            otpAuthentication[0]!!.setMyCustomListener { result ->
+                if (result) {
+                    ChangeUI(view)
+                }
+            }
+        }
+        check.setOnClickListener { if (otp.text != null) otpAuthentication[0]!!.signIn(otp.text.toString()) }
+
 
         return binding.root
     }
@@ -146,6 +168,13 @@ class LoginFragment : Fragment() {
         if(currentUser != null){
             reload();
         }
+    }
+
+    fun ChangeUI(view: View) {
+        val phoneNumberContainer = view.findViewById<LinearLayout>(R.id.phoneNumberContainer)
+        val otpContainer = view.findViewById<LinearLayout>(R.id.otpContainer)
+        phoneNumberContainer.visibility = View.INVISIBLE
+        otpContainer.visibility = View.VISIBLE
     }
 
 

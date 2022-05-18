@@ -2,6 +2,7 @@ package com.example.doorstep.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import com.example.doorstep.R
 import com.example.doorstep.databinding.ActivityLoginBinding
@@ -13,5 +14,7 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
         @Suppress("UNUSED_VARIABLE")
         val binding = DataBindingUtil.setContentView<ActivityLoginBinding>(this, R.layout.activity_login);
+
+        Log.e("Login Activity","Login Activity Started");
     }
 }

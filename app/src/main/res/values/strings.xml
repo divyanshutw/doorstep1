@@ -5,4 +5,6 @@
     <string name="logo">Logo</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="or">OR</string>
+    <string name="google">Google</string>
+    <string name="default_web_Client_id">979561888149-69338th91v564r7nlcioc9opocv6mv54.apps.googleusercontent.com</string>
 </resources>

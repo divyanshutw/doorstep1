@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "979561888149-3oi2lhdvb0vmded6lh1u9u22j7vvjkf2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.doorstep",
+            "certificate_hash": "4345c83a661fdc1499eabdaf9feb3a9ea8274498"
+          }
+        },
+        {
+          "client_id": "979561888149-7r63k71o7a5hjisn9uk1vem80ujooon8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.doorstep",
+            "certificate_hash": "1ccf24b60aa1e6b79e27148b814cc4bcbaba494f"
+          }
+        },
+        {
           "client_id": "979561888149-69338th91v564r7nlcioc9opocv6mv54.apps.googleusercontent.com",
           "client_type": 3
         }

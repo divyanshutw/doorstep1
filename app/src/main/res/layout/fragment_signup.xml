@@ -45,19 +45,24 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_round"/>
+                    android:background="@drawable/edittext_round"
+                    android:id="@+id/edittext_firstName"/>
 
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:hint="Last Name">
+                android:hint="Last Name"
+
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_round"/>
+                    android:background="@drawable/edittext_round"
+                    android:id="@+id/edittext_lastName"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -69,12 +74,14 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_round"/>
+                    android:background="@drawable/edittext_round"
+                    android:id="@+id/editText_phoneNumber"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_getOtp"
+            android:id="@+id/button_submitData"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/button_gradient_bg"

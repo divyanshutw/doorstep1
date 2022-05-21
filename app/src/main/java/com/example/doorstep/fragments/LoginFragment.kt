@@ -16,6 +16,8 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import com.example.doorstep.Interface.ChangeFragment
 import com.example.doorstep.R
 import com.example.doorstep.Scripts.auth.OtpAuthentication
 import com.example.doorstep.databinding.FragmentLoginBinding
@@ -50,6 +52,10 @@ class LoginFragment : Fragment() {
     private lateinit var phoneNUmberContainer:LinearLayout
     private lateinit var otpContainer:LinearLayout
 
+    private lateinit var Submit:Button
+    private lateinit var check:Button
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,8 +74,8 @@ class LoginFragment : Fragment() {
 
         val number = binding.edittextMobile
         auth = FirebaseAuth.getInstance()
-        val Submit = binding.buttonGetOtp
-        val check = binding.buttonCheckOtp
+        Submit = binding.buttonGetOtp
+        check = binding.buttonCheckOtp
         val otpAuthentication = arrayOfNulls<OtpAuthentication>(1)
         val otp =binding.edittextOtp
         phoneNUmberContainer=binding.phoneNumberContainer
@@ -86,6 +92,12 @@ class LoginFragment : Fragment() {
                     ChangeUI()
                 }
             }
+            otpAuthentication[0]!!.setFragmentChangeListener(ChangeFragment { value: Boolean ->
+                if (value){
+                    Log.e("CHANGE CREATED87y7","FUNCTION ENTERED")
+                    Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_signupFragment)
+                }
+            })
         }
         check.setOnClickListener { if (otp.text != null) otpAuthentication[0]!!.signIn(otp.text.toString()) }
 
@@ -188,6 +200,8 @@ class LoginFragment : Fragment() {
 //        phoneNumberContainer.visibility = View.INVISIBLE
         phoneNUmberContainer.visibility=View.INVISIBLE
         otpContainer.visibility = View.VISIBLE
+        Submit.visibility=View.INVISIBLE
+
         Log.e("CHANGE UI",phoneNUmberContainer.isVisible.toString())
 
     }

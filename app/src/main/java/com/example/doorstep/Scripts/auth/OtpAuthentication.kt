@@ -45,7 +45,7 @@ class OtpAuthentication(var context: Activity, var auth: FirebaseAuth) {
                 // The SMS verification code has been sent to the provided phone number, we
                 // now need to ask the user to enter the code and then construct a credential
                 // by combining the code with a verification ID.
-                Log.d(TAG, "onCodeSent:$verificationId")
+                Log.e(TAG, "onCodeSent:$verificationId")
 
                 // Save verification ID and resending token so we can use them later
                 mVerificationId = verificationId
@@ -79,12 +79,12 @@ class OtpAuthentication(var context: Activity, var auth: FirebaseAuth) {
             ) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
+                    Log.e(TAG, "signInWithCredential:success")
                     val user = task.result.user
                     // Update UI
                 } else {
                     // Sign in failed, display a message and update the UI
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Log.e(TAG, "signInWithCredential:failure", task.exception)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
                     }

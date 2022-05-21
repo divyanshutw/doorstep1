@@ -13,9 +13,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.doorstep.R
+import com.example.doorstep.Scripts.auth.OtpAuthentication
 import com.example.doorstep.databinding.FragmentLoginBinding
 import com.example.doorstep.viewModels.LoginViewModel
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -45,6 +47,9 @@ class LoginFragment : Fragment() {
 
     private val RC_SIGN_IN = 9001;
 
+    private lateinit var phoneNUmberContainer:LinearLayout
+    private lateinit var otpContainer:LinearLayout
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,19 +65,25 @@ class LoginFragment : Fragment() {
         googleSignIn();
         auth = Firebase.auth
 
-        val view = inflater.inflate(R.layout.fragment_login, container, false)
-        val number = view.findViewById<EditText>(R.id.edittext_mobile)
+
+        val number = binding.edittextMobile
         auth = FirebaseAuth.getInstance()
-        val Submit = view.findViewById<Button>(R.id.button_getOtp)
-        val check = view.findViewById<Button>(R.id.button_checkOtp)
+        val Submit = binding.buttonGetOtp
+        val check = binding.buttonCheckOtp
         val otpAuthentication = arrayOfNulls<OtpAuthentication>(1)
-        val otp = view.findViewById<EditText>(R.id.edittext_otp)
+        val otp =binding.edittextOtp
+        phoneNUmberContainer=binding.phoneNumberContainer
+        otpContainer=binding.otpContainer
+
+
         Submit.setOnClickListener { view ->
+            Log.e("SUBMIT","ENTER")
             otpAuthentication[0] = OtpAuthentication(requireActivity(), auth!!)
             otpAuthentication[0]!!.getOtp(number.text.toString())
             otpAuthentication[0]!!.setMyCustomListener { result ->
                 if (result) {
-                    ChangeUI(view)
+
+                    ChangeUI()
                 }
             }
         }
@@ -170,11 +181,15 @@ class LoginFragment : Fragment() {
         }
     }
 
-    fun ChangeUI(view: View) {
-        val phoneNumberContainer = view.findViewById<LinearLayout>(R.id.phoneNumberContainer)
-        val otpContainer = view.findViewById<LinearLayout>(R.id.otpContainer)
-        phoneNumberContainer.visibility = View.INVISIBLE
+    fun ChangeUI() {
+        Log.e("CHANGE UI","ENTER")
+//        val phoneNumberContainer = view.findViewById<LinearLayout>(R.id.phoneNumberContainer)
+//        val otpContainer = view.findViewById<LinearLayout>(R.id.otpContainer)
+//        phoneNumberContainer.visibility = View.INVISIBLE
+        phoneNUmberContainer.visibility=View.INVISIBLE
         otpContainer.visibility = View.VISIBLE
+        Log.e("CHANGE UI",phoneNUmberContainer.isVisible.toString())
+
     }
 
 

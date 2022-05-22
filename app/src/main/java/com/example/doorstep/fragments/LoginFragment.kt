@@ -102,13 +102,10 @@ class LoginFragment : Fragment() {
 
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
-        Log.d("div", "LoginFragment L72");
         binding.mainGoogleLogin.setOnClickListener {
-            Log.d("div", "LoginFragment L74");
             googleSignInClient.signOut()
             var intent: Intent = googleSignInClient.signInIntent
             startActivityForResult(intent, RC_SIGN_IN)
-            Log.d("div", "LoginFragment L78");
         }
     }
 
@@ -119,30 +116,23 @@ class LoginFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d("div", "LoginFragment L89 onActivityResult")
         super.onActivityResult(requestCode, resultCode, data)
-        Log.d("div", "LoginFragment L92");
         if(requestCode== RC_SIGN_IN)
         {
-            Log.d("div", "LoginFragment L95 $data");
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             googleSignInResult(task)
         }
-        Log.d("div", "LoginFragment L99 onActivityResult")
         //callbackManager.onActivityResult(requestCode, resultCode, data)
     }
     fun googleSignInResult(task: Task<GoogleSignInAccount>)
     {
         try{
             val account:GoogleSignInAccount = task.getResult(ApiException::class.java)!!
-            Log.d("div", "LoginFragment  L106 ${account.email}, ${account.id}")
             //If data found in database then goto FirebaseGoogleAuth function otherwise go to signUp page
 //            Toast.makeText(activity, viewModel.uid, Toast.LENGTH_LONG).show()
             val authCredential: AuthCredential =
                 GoogleAuthProvider.getCredential(account.idToken, null)
-            Log.d("div", "LoginFragment L111");
             signInWithGoogleAuthCredential(authCredential)
-            Log.d("div", "LoginFragment L113");
         }
         catch (e: ApiException)
         {
@@ -153,18 +143,18 @@ class LoginFragment : Fragment() {
 
     fun signInWithGoogleAuthCredential(googleAuthCredential: AuthCredential?) {
         val firebaseAuth = FirebaseAuth.getInstance()
-        Log.d("div", "LoginFragment L124");
 
         firebaseAuth.signInWithCredential(googleAuthCredential!!)
             .addOnCompleteListener { authTask: Task<AuthResult> ->
                 if (authTask.isSuccessful) {
-                    Log.d("div", "LoginFragment L129");
-                    val isNewUser =
-                        authTask.result!!.additionalUserInfo!!.isNewUser
+                    val isNewUser = authTask.result!!.additionalUserInfo!!.isNewUser
                     val firebaseUser = firebaseAuth.currentUser
                     if (firebaseUser != null) {
-                        Log.d("div", "AuthRepository L35 ${firebaseUser.uid}, ${firebaseUser.email}, ${authTask.result!!.additionalUserInfo!!.isNewUser}, ${firebaseUser.displayName}," +
-                                " ${firebaseUser.phoneNumber}, ${firebaseUser.photoUrl.toString()}");
+                        Log.d("div", "LoginFragment L160 ${firebaseUser.uid}, ${firebaseUser.email}, ${authTask.result!!.additionalUserInfo!!.isNewUser}, ${firebaseUser.displayName}," +
+                                " ${firebaseUser.phoneNumber}, ${firebaseUser.photoUrl.toString()}, $isNewUser");
+                        editor?.putBoolean("isLoggedIn", true)
+                        editor?.putString("uid", firebaseUser.uid)
+                        editor?.commit()
                     }
                 } else {
                     Log.d("div", "AuthRepository Google Failed ${authTask.exception} ${authTask.isCanceled} ${authTask.isComplete}")
@@ -175,10 +165,12 @@ class LoginFragment : Fragment() {
     public override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if(currentUser != null){
-            reload();
-        }
+//        val currentUser = auth.currentUser
+//        if(currentUser != null){
+//            reload();
+//        }
+        if(preferences!!.contains("isLoggedIn") && preferences!!.getBoolean("isLoggedIn", false))
+            reload()
     }
 
     fun ChangeUI() {

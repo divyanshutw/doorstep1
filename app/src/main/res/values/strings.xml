@@ -7,4 +7,14 @@
     <string name="or">OR</string>
     <string name="google">Google</string>
     <string name="default_web_Client_id">979561888149-69338th91v564r7nlcioc9opocv6mv54.apps.googleusercontent.com</string>
+    <string name="title_activity_customer_home">CustomerHomeActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="painting">Painting</string>
+    <string name="favorites">Favorites</string>
+    <string name="profile">Profile</string>
+    <string name="search_for_fruits_vegetables_groceries_etc">Search for fruits, vegetables, groceries, etc.</string>
+    <string name="sent_to">Sent to</string>
+    <string name="categories">Categories</string>
 </resources>

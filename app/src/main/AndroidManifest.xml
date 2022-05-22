@@ -11,6 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Doorstep">
         <activity
+            android:name=".activities.CustomerHomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_customer_home" />
+        <activity
             android:name=".activities.LoginActivity"
             android:exported="false" />
         <activity

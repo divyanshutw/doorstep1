@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="primary_theme_color">#8C52FF</color>
+    <color name="text_black">#000000</color>
+    <color name="category_active_color">#4CAD73</color>
 </resources>

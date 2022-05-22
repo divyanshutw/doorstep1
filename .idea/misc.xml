@@ -4,7 +4,6 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable/button_gradient_bg.xml" value="0.228" />
-
         <entry key="app/src/main/res/drawable/edittext_round.xml" value="0.228" />
         <entry key="app/src/main/res/drawable/product_bg.xml" value="0.183" />
         <entry key="app/src/main/res/drawable/rounded_corner_bg.xml" value="0.1" />
@@ -19,11 +18,11 @@
         <entry key="app/src/main/res/layout/item_product.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/list_item_product.xml" value="0.29814814814814816" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.3098958333333333" />
-
+        <entry key="app/src/main/res/xml/settings_preference.xml" value="0.28177083333333336" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

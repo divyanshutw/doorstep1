@@ -59,7 +59,7 @@ public class SignupTest extends Fragment {
                 reference.set(userdata).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

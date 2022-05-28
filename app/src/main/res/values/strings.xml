@@ -17,4 +17,7 @@
     <string name="search_for_fruits_vegetables_groceries_etc">Search for fruits, vegetables, groceries, etc.</string>
     <string name="sent_to">Sent to</string>
     <string name="categories">Categories</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_maps2">MapsActivity2</string>
+    <string name="title_activity_maps_final">MapsActivityFinal</string>
 </resources>

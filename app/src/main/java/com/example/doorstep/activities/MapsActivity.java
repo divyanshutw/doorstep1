@@ -16,6 +16,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.doorstep.R;
@@ -28,6 +29,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,7 +43,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     Boolean flag = false;
     TextInputEditText addressLine;
     String address,city,state,country,postalCode;
-    Button submit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         addressLine=binding.edittextAddressLine;
+        binding.buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!binding.edittextBuildingName.getEditableText().equals("")){
+                    FirebaseFirestore firestore=FirebaseFirestore.getInstance();
+
+                }
+            }
+        });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

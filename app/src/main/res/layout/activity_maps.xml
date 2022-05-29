@@ -145,6 +145,7 @@
                                             android:layout_marginTop="20dp"
                                             android:text="SUBMIT"
                                             android:textColor="@color/white"
+                                            android:id="@+id/button_submit"
                                             android:textSize="20sp"
                                             android:layout_marginBottom="20dp"
                                             />

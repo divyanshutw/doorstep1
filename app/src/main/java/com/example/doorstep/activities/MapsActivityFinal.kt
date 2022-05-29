@@ -16,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.textfield.TextInputEditText
 import java.io.IOException
 import java.util.*
 
@@ -23,10 +24,18 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
     private var mMap: GoogleMap? = null
     private var binding: ActivityMapsBinding? = null
     var flag = false
+    var addressLine: TextInputEditText? = null
+    lateinit var address: String
+    lateinit var city:String
+    lateinit var state:String
+    lateinit var country:String
+    lateinit var postalCode:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
+        addressLine = binding!!.edittextAddressLine
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -45,6 +54,7 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
 
         // Add a marker in Sydney and move the camera
         if (ActivityCompat.checkSelfPermission(
@@ -99,11 +109,19 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
     }
 
     override fun onLocationChanged(location: Location) {
-        try {
-            getAddress(location)
-        } catch (e: Exception) {
-            Log.e("Maps Activity", e.message!!)
+        if (!flag) {
+            try {
+                getAddress(location)
+                flag = false
+                updateUI()
+            } catch (e: Exception) {
+                Log.e("Maps Activity", e.message!!)
+            }
         }
+    }
+
+    private fun updateUI() {
+        addressLine?.setText(address)
     }
 
 
@@ -120,12 +138,12 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
             location.longitude,
             1
         ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-        val address =
+        address =
             addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-        val city = addresses[0].locality
-        val state = addresses[0].adminArea
-        val country = addresses[0].countryName
-        val postalCode = addresses[0].postalCode
+        city = addresses[0].locality
+        state = addresses[0].adminArea
+        country = addresses[0].countryName
+        postalCode = addresses[0].postalCode
         Log.e("Maps Activity", "$address $city $state $country $postalCode")
         mMap!!.addMarker(
             MarkerOptions().position(LatLng(location.latitude, location.longitude))
@@ -141,4 +159,6 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
         )
         return address
     }
-}
+
+
+    }

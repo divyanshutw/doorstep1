@@ -63,7 +63,8 @@ RecyclerView.Adapter<HomeFragmentProductRecyclerAdapter.ViewHolder>() {
             val textViewPrice = itemView.findViewById<TextView>(R.id.textView_productPrice)
             val imageButtonFavorite = itemView.findViewById<ImageButton>(R.id.imageButton_favorite)
             val imageButtonAddToCart = itemView.findViewById<ImageButton>(R.id.imageButton_addToCart)
-            imageView.setImageResource((productModel.productImage).toInt())
+//            imageView.setImageResource((productModel.productImage).toInt())
+            imageView.setImageResource(R.drawable.carrots)
             textViewTitle.text = productModel.title
             textViewPrice.text = productModel.currentPrice
             textViewOldPrice.text = productModel.oldPrice

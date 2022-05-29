@@ -4,13 +4,12 @@ import android.app.Activity
 import android.util.Log
 import com.example.doorstep.Interface.ChangeFragment
 import com.example.doorstep.Interface.OtpUiChange
-import com.example.doorstep.Scripts.auth.FirebaseFunctions.FireBaseCRUD
+import com.example.doorstep.Scripts.auth.FirebaseFunctions.FirebaseCRUD
 
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.PhoneAuthProvider.ForceResendingToken
 import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.concurrent.TimeUnit
@@ -22,7 +21,7 @@ class OtpAuthentication(var context: Activity, var auth: FirebaseAuth) {
     var TAG = "OTP Autheniation activity"
     private var listener: OtpUiChange?=null
     private var changeFragmentListner: ChangeFragment?=null
-    var fireBaseCRUD: FireBaseCRUD = FireBaseCRUD()
+    var fireBaseCRUD: FirebaseCRUD = FirebaseCRUD()
     fun setMyCustomListener(listener: OtpUiChange?) {
         this.listener = listener
 

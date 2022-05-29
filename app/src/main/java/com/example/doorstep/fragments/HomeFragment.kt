@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -38,8 +39,8 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
 
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        viewModel.fetchCategories()
-        viewModel.fetchProducts("1")
+        //viewModel.fetchCategories()
+        //viewModel.fetchProducts("Vegetables")
         initObservers()
         binding.textViewAddress.setOnClickListener(View.OnClickListener {
             startActivity(Intent(context, MapsActivityFinal::class.java))
@@ -52,16 +53,24 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
     private fun initObservers() {
         viewModel.categoriesList.observe(viewLifecycleOwner) {
             categoriesList = it
+            Log.d("div", "HomeFragment L48 ${categoriesList.size}")
             val categoriesAdapter = HomeFragmentCategoryRecyclerAdapter(categoriesList, this)
             binding.recyclerViewCategories.adapter = categoriesAdapter
-            Log.d("div", "HomeFragment  L47 ${categoriesList[0].name}")
+            if(categoriesList.size>0) {
+                binding.textViewCategoryHeading.text = categoriesList[0].name
+            }
+            Log.d("div", "HomeFragment L52 categoriesList: ${categoriesList.size}")
         }
 
         viewModel.productsList.observe(viewLifecycleOwner){
             productsList = it
             val productsAdapter = HomeFragmentProductRecyclerAdapter(productsList, this)
             binding.recyclerViewProducts.adapter = productsAdapter
-            Log.d("div", "HomeFragment  L56 ${productsList[0].title}")
+            Log.d("div", "HomeFragment L60 productsList: ${productsList.size}")
+            binding.recyclerViewProducts.adapter!!.notifyDataSetChanged()
+        }
+
+        viewModel.favoritesList.observe(viewLifecycleOwner){
 
         }
     }
@@ -80,12 +89,25 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
 //        binding.recyclerViewCategories.adapter!!.notifyItemChanged(activeItemPos)
 //        binding.recyclerViewCategories.adapter!!.notifyItemChanged(position)
 
-        viewModel.fetchProducts(categoriesList[position].id)
-        //TODO: Change data to products of that category
+        viewModel.fetchProducts(categoriesList[position].name)
+        binding.textViewCategoryHeading.text = categoriesList[position].name
     }
 
     override fun onClickFavorite(itemView: View, position: Int) {
-        //TODO("Not yet implemented")
+        val buttonFavorite = itemView.findViewById<ImageButton>(R.id.imageButton_favorite)
+        var isFavorite = viewModel.productsList.value!![position].isFavorite
+        isFavorite = !isFavorite
+        viewModel.productsList.value!![position].isFavorite = isFavorite
+        if(isFavorite)
+        {
+            buttonFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+            viewModel.favoritesList.value?.add(viewModel.productsList.value!![position].id)
+        }
+        else{
+            buttonFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+            viewModel.favoritesList.value?.remove(viewModel.productsList.value!![position].id)
+        }
+        viewModel.toggleFavorite()
     }
 
     override fun onClickAddToCart(itemView: View, position: Int) {

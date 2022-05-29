@@ -52,12 +52,10 @@ class HomeFragmentCategoryRecyclerAdapter(
         fun bind(categoryModel: CategoryModel) {
             val imageView = itemView.findViewById<ImageView>(R.id.imageView_categoryImg)
             val textView = itemView.findViewById<TextView>(R.id.textView_categoryName)
-            imageView.setImageResource((categoryModel.image).toInt())
+            //imageView.setImageResource((categoryModel.image))
+            imageView.setImageResource(R.drawable.fruits)
             textView.text = categoryModel.name
             Log.d("div", "HoemFragmentCategoryRecyclerAdapter L56 ${categoryModel.name} ${categoryModel.image} ${categoryModel.isActive} ${R.dimen.categoryImageSizeOnClick}")
-            if(categoryModel.isActive){
-                textView.setTextColor(Color.parseColor("#4CAD73"))
-            }
         }
     }
 

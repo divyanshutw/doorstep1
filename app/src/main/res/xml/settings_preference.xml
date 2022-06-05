@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:key="notifications_category">
+        <Preference
+            app:key="myAccount"
+            app:summary="Make change to your account"
+            app:title="My Account"
+            app:layout="@layout/prefernce_design"
+            />
+        <Preference
+            app:key="savedAddress"
+            app:summary="Manage your saved address"
+            app:title="Saved Address"
+            app:layout="@layout/saved_address_design"
+            />
+        <Preference
+            app:key="savedPaymentOptions"
+            app:summary="Manage your saved payment options"
+            app:title="Saved Payments"
+            app:layout="@layout/saved_payment_options"
+            />
+        <Preference
+            app:key="logout"
+            app:summary="Log out of the application"
+            app:title="Log Out"
+            app:layout="@layout/logout_design"
+            />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="help_category"
+        >
+
+        <Preference
+            app:key="feedback"
+            app:title="Help and Support"/>
+        <Preference
+            app:key="about"
+            app:title="About App"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

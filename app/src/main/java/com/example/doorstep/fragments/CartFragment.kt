@@ -1,5 +1,6 @@
 package com.example.doorstep.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.doorstep.R
+import com.example.doorstep.activities.PaymentActivityFinal
 import com.example.doorstep.adapters.CartFragmentProductsRecyclerAdapter
 import com.example.doorstep.databinding.FragmentCartBinding
 import com.example.doorstep.viewModels.CartViewModel
@@ -49,6 +51,7 @@ class CartFragment : Fragment(), CartFragmentProductsRecyclerAdapter.CartItemLis
                 )
             }
             viewModel.addOrderToFirestore(productsList)
+            startActivity(Intent(context,PaymentActivityFinal::class.java))
         }
     }
 

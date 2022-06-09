@@ -108,6 +108,7 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
     @get:SuppressLint("MissingPermission")
     private val locationUpdate: Unit
         private get() {
+
             val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER, 0, 0f
@@ -135,10 +136,10 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
     }
 
     override fun onLocationChanged(location: Location) {
-        if (flag != true) {
+        if (!flag) {
             try {
                 getAddress(location)
-                flag = false
+                flag = true
                 updateUI()
             } catch (e: Exception) {
                 Log.e("Maps Activity", e.message!!)

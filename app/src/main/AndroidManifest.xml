@@ -13,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Doorstep">
-
+        <activity
+            android:name=".activities.PaymentActivity"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -48,6 +50,10 @@
         <activity
             android:name=".activities.LoginActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.PaymentActivityFinal"
+            android:exported="false"
+            android:label="Payments Activity Final"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

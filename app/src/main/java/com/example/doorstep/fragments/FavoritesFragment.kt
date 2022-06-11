@@ -6,17 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.doorstep.R
-import com.example.doorstep.adapters.HomeFragmentCategoryRecyclerAdapter
 import com.example.doorstep.adapters.HomeFragmentProductRecyclerAdapter
 import com.example.doorstep.databinding.FragmentFavoritesBinding
-import com.example.doorstep.databinding.FragmentHomeBinding
 import com.example.doorstep.viewModels.FavoritesViewModel
+import com.example.doorstep.viewModels.FavoritesViewModelFactory
 import com.example.doorstep.viewModels.HomeViewModel
+import com.example.doorstep.viewModels.HomeViewModelFactory
 
 class FavoritesFragment : Fragment(), HomeFragmentProductRecyclerAdapter.ProductListener {
 
@@ -31,7 +31,8 @@ class FavoritesFragment : Fragment(), HomeFragmentProductRecyclerAdapter.Product
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_favorites, container, false)
         binding.lifecycleOwner = this
 
-        viewModel = ViewModelProvider(this).get(FavoritesViewModel::class.java)
+        viewModel = ViewModelProvider(this, FavoritesViewModelFactory(requireActivity().application))
+            .get(FavoritesViewModel::class.java)
 
         initObservers()
 
@@ -67,6 +68,7 @@ class FavoritesFragment : Fragment(), HomeFragmentProductRecyclerAdapter.Product
     }
 
     override fun onClickAddToCart(itemView: View, position: Int) {
-        TODO("Not yet implemented")
+        viewModel.insertIntoCartDb(viewModel.productsList.value?.get(position)!!, 1)
+        Toast.makeText(this.context, "1 Item added to cart", Toast.LENGTH_SHORT).show()
     }
 }

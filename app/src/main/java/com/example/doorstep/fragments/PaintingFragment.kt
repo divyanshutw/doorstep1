@@ -1,43 +1,58 @@
 package com.example.doorstep.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import com.example.doorstep.R
+import com.example.doorstep.adapters.OrdersFragmentOrdersRecyclerAdapter
 import com.example.doorstep.databinding.FragmentPaintingBinding
 import com.example.doorstep.viewModels.PaintingViewModel
 
-class PaintingFragment : Fragment() {
+class PaintingFragment : Fragment(), OrdersFragmentOrdersRecyclerAdapter.OrdersItemListener {
 
-    private var _binding: FragmentPaintingBinding? = null
+    private lateinit var binding: FragmentPaintingBinding
+    private lateinit var viewModel: PaintingViewModel
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(PaintingViewModel::class.java)
+        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_painting, container, false)
+        binding.lifecycleOwner = this
 
-        _binding = FragmentPaintingBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        viewModel = ViewModelProvider(this).get(PaintingViewModel::class.java)
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+        initObservers()
+        initOnClickListeners()
+
+        return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun initOnClickListeners() {
+        //TODO("Not yet implemented")
+    }
+
+    private fun initObservers() {
+        viewModel.ordersList.observe(viewLifecycleOwner){
+            if(it!=null){
+                val adapter = OrdersFragmentOrdersRecyclerAdapter(it, this)
+                binding.recyclerViewProducts.adapter = adapter
+            }
+        }
+    }
+
+    override fun onClickOrder(itemView: View, position: Int) {
+        val bundle = Bundle()
+        bundle.putParcelableArrayList("productsList", viewModel.ordersList.value?.get(position)!!.products)
+        bundle.putLong("totalPrice", viewModel.ordersList.value?.get(position)!!.totalPrice!!)
+        view?.findNavController()?.navigate(R.id.action_navigation_painting_to_ordersProductsFragment, bundle)
     }
 }

@@ -20,4 +20,14 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="title_activity_maps2">MapsActivity2</string>
     <string name="title_activity_maps_final">MapsActivityFinal</string>
+    <string name="item">item</string>
+    <string name="delete_item">Delete item</string>
+    <string name="minus">Minus</string>
+    <string name="plus">Plus</string>
+    <string name="cart">Cart</string>
+    <string name="total">Total</string>
+    <string name="checkout">Checkout</string>
+    <string name="orders">Orders</string>
+    <string name="your_order">Your order</string>
+    <string name="quantity">Quantity</string>
 </resources>

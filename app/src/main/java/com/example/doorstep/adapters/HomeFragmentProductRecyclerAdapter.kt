@@ -1,6 +1,7 @@
 package com.example.doorstep.adapters
 
 import android.graphics.Color
+import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -64,7 +65,13 @@ RecyclerView.Adapter<HomeFragmentProductRecyclerAdapter.ViewHolder>() {
             val imageButtonFavorite = itemView.findViewById<ImageButton>(R.id.imageButton_favorite)
             val imageButtonAddToCart = itemView.findViewById<ImageButton>(R.id.imageButton_addToCart)
 //            imageView.setImageResource((productModel.productImage).toInt())
-            imageView.setImageResource(R.drawable.carrots)
+            if(productModel.quantity!! > 0){
+                imageView.setImageResource(R.drawable.carrots)
+            }
+            else{
+                imageView.setImageResource(R.drawable.out_of_stock)
+                imageButtonAddToCart.visibility = View.INVISIBLE
+            }
             textViewTitle.text = productModel.title
             textViewPrice.text = productModel.currentPrice
             textViewOldPrice.text = productModel.oldPrice

@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -28,12 +27,16 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDwnoXcQJ47WErq1rInr3cYS5Z1vEC6FEg" />
+            android:value="${MAPS_API_KEY}" />
 
         <activity
             android:name=".activities.MapsActivityFinal"
             android:exported="false"
             android:label="@string/title_activity_maps_final" />
+        <activity
+            android:name=".activities.DeliveryMapsActivityFinal"
+            android:exported="false"
+            android:label="DeliveryMapsActivityfinal" />
         <activity
             android:name=".activities.MapsActivity"
             android:exported="false"

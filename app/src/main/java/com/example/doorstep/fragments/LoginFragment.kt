@@ -20,6 +20,7 @@ import androidx.navigation.Navigation
 import com.example.doorstep.Interface.ChangeFragment
 import com.example.doorstep.R
 import com.example.doorstep.Scripts.auth.OtpAuthentication
+import com.example.doorstep.activities.CustomerHomeActivity
 import com.example.doorstep.databinding.FragmentLoginBinding
 import com.example.doorstep.viewModels.LoginViewModel
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
@@ -105,7 +106,7 @@ class LoginFragment : Fragment() {
         return binding.root
     }
 
-    public fun googleSignIn(){
+    private fun googleSignIn(){
 
         var gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_Client_id))
@@ -123,12 +124,13 @@ class LoginFragment : Fragment() {
 
 
 
-    public fun reload(){
-        //TODO: The user is logged in.....go to the home page
+    private fun reload(){
+        startActivity(Intent(this.context, CustomerHomeActivity::class.java))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Log.d("div", "LoginFragment L132 $resultCode $requestCode")
         if(requestCode== RC_SIGN_IN)
         {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -136,24 +138,26 @@ class LoginFragment : Fragment() {
         }
         //callbackManager.onActivityResult(requestCode, resultCode, data)
     }
-    fun googleSignInResult(task: Task<GoogleSignInAccount>)
+    private fun googleSignInResult(task: Task<GoogleSignInAccount>)
     {
         try{
+            Log.d("div","LoginFragment L143 googleSignInResult")
             val account:GoogleSignInAccount = task.getResult(ApiException::class.java)!!
             //If data found in database then goto FirebaseGoogleAuth function otherwise go to signUp page
-//            Toast.makeText(activity, viewModel.uid, Toast.LENGTH_LONG).show()
+            Log.d("div","LoginFragment L146 googleSignInResult")
             val authCredential: AuthCredential =
                 GoogleAuthProvider.getCredential(account.idToken, null)
+            Log.d("div","LoginFragment L149 googleSignInResult ${account.idToken}")
             signInWithGoogleAuthCredential(authCredential)
         }
         catch (e: ApiException)
         {
             Toast.makeText(activity, "Login failed", Toast.LENGTH_LONG).show()
-            Log.e("googleLogin", "Error: ${e.stackTrace} / ${e.cause} / ${e.status} / ${e.localizedMessage}")
+            Log.e("div", "Error: ${e.stackTrace} / ${e.cause} / ${e.status} / ${e.localizedMessage}")
         }
     }
 
-    fun signInWithGoogleAuthCredential(googleAuthCredential: AuthCredential?) {
+    private fun signInWithGoogleAuthCredential(googleAuthCredential: AuthCredential?) {
         val firebaseAuth = FirebaseAuth.getInstance()
 
         firebaseAuth.signInWithCredential(googleAuthCredential!!)
@@ -167,6 +171,7 @@ class LoginFragment : Fragment() {
                         editor?.putBoolean("isLoggedIn", true)
                         editor?.putString("uid", firebaseUser.uid)
                         editor?.commit()
+                        reload()
                     }
                 } else {
                     Log.d("div", "AuthRepository Google Failed ${authTask.exception} ${authTask.isCanceled} ${authTask.isComplete}")
@@ -185,7 +190,7 @@ class LoginFragment : Fragment() {
             reload()
     }
 
-    fun ChangeUI() {
+    private fun ChangeUI() {
         Log.e("CHANGE UI","ENTER")
 //        val phoneNumberContainer = view.findViewById<LinearLayout>(R.id.phoneNumberContainer)
 //        val otpContainer = view.findViewById<LinearLayout>(R.id.otpContainer)

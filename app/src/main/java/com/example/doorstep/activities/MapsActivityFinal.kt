@@ -2,6 +2,7 @@ package com.example.doorstep.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.*
 import android.os.Bundle
@@ -17,6 +18,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import java.io.IOException
 import java.util.*
 
@@ -25,18 +29,39 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
     private var binding: ActivityMapsBinding? = null
     var flag = false
     var addressLine: TextInputEditText? = null
-    lateinit var address: String
-    lateinit var city:String
-    lateinit var state:String
-    lateinit var country:String
-    lateinit var postalCode:String
-
+    var address: String? = null
+    var city: String? = null
+    var state: String? = null
+    var country: String? = null
+    var postalCode: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
         addressLine = binding!!.edittextAddressLine
-
+        binding!!.buttonSubmit.setOnClickListener {
+            if (!binding!!.edittextBuildingName.editableText.equals("")) {
+                val firestore = FirebaseFirestore.getInstance()
+                val auth = FirebaseAuth.getInstance()
+                val data = HashMap<String, Any>()
+                val address = HashMap<String, Any?>()
+                address["AddressLine"] = this.address
+                address["BuildingName"] = binding!!.edittextBuildingName.text.toString()
+                address["pinCode"] = postalCode
+                address["tag"] = "Home"
+                address["isActive"] = true
+                address["Landmark"] = binding!!.edittextLandMark.text.toString()
+                val list = ArrayList<HashMap<String, Any?>>()
+                list.add(address)
+                data["address"] = list
+                Log.e("MAPS",data.toString());
+                firestore.collection("Customers").document(auth.uid!!)
+                    .set(data, SetOptions.merge()).addOnSuccessListener {
+                        startActivity(Intent(baseContext, CustomerHomeActivity::class.java))
+                        Log.e("MAPSACTIVITYFINAL","DATA SAVED")
+                    }.addOnFailureListener { }
+            }
+        }
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
@@ -110,7 +135,7 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
     }
 
     override fun onLocationChanged(location: Location) {
-        if (!flag) {
+        if (flag != true) {
             try {
                 getAddress(location)
                 flag = false
@@ -122,15 +147,28 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
     }
 
     private fun updateUI() {
-        addressLine?.setText(address)
+        addressLine!!.setText(address)
     }
 
 
-
+    override fun onPointerCaptureChanged(hasCapture: Boolean) {
+        super.onPointerCaptureChanged(hasCapture)
+    }
 
     @Throws(IOException::class)
-    private fun getAddress(location: Location): String {
-
+    private fun getAddress(location: Location): String? {
+        mMap!!.addMarker(
+            MarkerOptions().position(LatLng(location.latitude, location.longitude))
+                .title("Your Location")
+        )
+        mMap!!.moveCamera(
+            CameraUpdateFactory.newLatLng(
+                LatLng(
+                    location.latitude,
+                    location.longitude
+                )
+            )
+        )
         val geocoder: Geocoder
         val addresses: List<Address>
         geocoder = Geocoder(this, Locale.getDefault())
@@ -146,20 +184,10 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
         country = addresses[0].countryName
         postalCode = addresses[0].postalCode
         Log.e("Maps Activity", "$address $city $state $country $postalCode")
-        mMap!!.addMarker(
-            MarkerOptions().position(LatLng(location.latitude, location.longitude))
-                .title("Your Location")
-        )
-        mMap!!.moveCamera(
-            CameraUpdateFactory.newLatLng(
-                LatLng(
-                    location.latitude,
-                    location.longitude
-                )
-            )
-        )
         return address
     }
 
-
+    override fun onBackPressed() {
+        startActivity(Intent(this, CustomerHomeActivity::class.java))
     }
+}

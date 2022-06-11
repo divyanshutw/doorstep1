@@ -28,10 +28,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,6 +63,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 if(!binding.edittextBuildingName.getEditableText().equals("")){
                     FirebaseFirestore firestore=FirebaseFirestore.getInstance();
+                    FirebaseAuth auth=FirebaseAuth.getInstance();
+                    HashMap<String,Object> data=new HashMap<>();
+                    HashMap<String,Object> address=new HashMap<>();
+                    address.put("AddressLine",address);
+                    address.put("BuildingName",binding.edittextBuildingName.toString());
+                    address.put("pinCode",postalCode);
+                    address.put("tag","Home");
+                    address.put("isActive",true);
+                    address.put("Landmark",binding.edittextLandMark.toString());
+
+                    ArrayList<HashMap<String,Object>> list=new ArrayList<>();
+                    list.add(address);
+                    data.put("address",list);
+                    firestore.collection("Customers").document(auth.getUid()).set(data, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            startActivity(new Intent(getBaseContext(),CustomerHomeActivity.class));
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
 
                 }
             }

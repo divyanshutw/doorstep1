@@ -7,11 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.example.doorstep.R
-import com.example.doorstep.activities.MapsActivity
 import com.example.doorstep.activities.MapsActivityFinal
 
 import com.example.doorstep.adapters.HomeFragmentCategoryRecyclerAdapter
@@ -20,6 +21,7 @@ import com.example.doorstep.databinding.FragmentHomeBinding
 import com.example.doorstep.models.CategoryModel
 import com.example.doorstep.models.ProductModel
 import com.example.doorstep.viewModels.HomeViewModel
+import com.example.doorstep.viewModels.HomeViewModelFactory
 
 class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryListener, HomeFragmentProductRecyclerAdapter.ProductListener {
 
@@ -37,17 +39,25 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_home, container, false)
         binding.lifecycleOwner = this
 
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel = ViewModelProvider(this, HomeViewModelFactory(requireActivity().application))
+            .get(HomeViewModel::class.java)
 
         //viewModel.fetchCategories()
         //viewModel.fetchProducts("Vegetables")
         initObservers()
-        binding.textViewAddress.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(context, MapsActivityFinal::class.java))
-        })
+        initOnClickListeners()
 
 
         return binding.root
+    }
+
+    private fun initOnClickListeners() {
+        binding.textViewAddress.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(context, MapsActivityFinal::class.java))
+        })
+        binding.imageButtonCart.setOnClickListener {
+            view?.findNavController()?.navigate(R.id.action_navigation_home_to_cartFragment)
+        }
     }
 
     private fun initObservers() {
@@ -102,15 +112,18 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
         {
             buttonFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
             viewModel.favoritesList.value?.add(viewModel.productsList.value!![position].id)
+            Log.d("div", "HomeFragment L115 ${viewModel.favoritesList.value}")
         }
         else{
             buttonFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
             viewModel.favoritesList.value?.remove(viewModel.productsList.value!![position].id)
+            Log.d("div", "HomeFragment L120 ${viewModel.favoritesList.value}")
         }
         viewModel.toggleFavorite()
     }
 
     override fun onClickAddToCart(itemView: View, position: Int) {
-        //TODO("Not yet implemented")
+        viewModel.insertIntoCartDb(viewModel.productsList.value?.get(position)!!, 1)
+        Toast.makeText(this.context, "1 Item added to cart", Toast.LENGTH_SHORT).show()
     }
 }

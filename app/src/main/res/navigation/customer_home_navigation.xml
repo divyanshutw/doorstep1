@@ -9,13 +9,21 @@
         android:id="@+id/navigation_home"
         android:name="com.example.doorstep.fragments.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_painting"
         android:name="com.example.doorstep.fragments.PaintingFragment"
         android:label="@string/painting"
-        tools:layout="@layout/fragment_painting" />
+        tools:layout="@layout/fragment_painting" >
+        <action
+            android:id="@+id/action_navigation_painting_to_ordersProductsFragment"
+            app:destination="@id/ordersProductsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_favorites"
@@ -28,5 +36,15 @@
         android:name="com.example.doorstep.fragments.ProfileFragment"
         android:label="@string/profile"
          />
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.doorstep.fragments.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" />
+    <fragment
+        android:id="@+id/ordersProductsFragment"
+        android:name="com.example.doorstep.fragments.OrdersProductsFragment"
+        android:label="fragment_orders_products"
+        tools:layout="@layout/fragment_orders_products" />
 
 </navigation>

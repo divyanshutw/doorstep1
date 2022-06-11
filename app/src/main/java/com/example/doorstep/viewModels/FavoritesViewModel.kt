@@ -1,20 +1,19 @@
 package com.example.doorstep.viewModels
 
+import android.app.Application
+import android.os.AsyncTask
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.doorstep.dao.CartDatabase
+import com.example.doorstep.dao.getDatabase
+import com.example.doorstep.models.CartModel
 import com.example.doorstep.models.ProductModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
-class FavoritesViewModel : ViewModel() {
+class FavoritesViewModel(application: Application): AndroidViewModel(application){
 
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -24,6 +23,8 @@ class FavoritesViewModel : ViewModel() {
 
     private val _productsList = MutableLiveData<ArrayList<ProductModel>>()
     val productsList:LiveData<ArrayList<ProductModel>> = _productsList
+
+    private val database: CartDatabase = getDatabase(application)
 
     init{
         viewModelScope.launch {
@@ -36,8 +37,9 @@ class FavoritesViewModel : ViewModel() {
         if(uid != null){
             FirebaseFirestore.getInstance().collection("Customers").document(uid).get()
                 .addOnSuccessListener {
+                    Log.d("div", "FavoritesViewModel L39 ${Firebase.auth.currentUser!!.uid}")
                     _favoritesList.value = it.get("favorites") as ArrayList<String>?
-                    Log.d("div", "FavoritesViewModel L40 ${_favoritesList.value!!.size}")
+                    Log.d("div", "FavoritesViewModel L40 ${_favoritesList.value}")
                     if(_favoritesList.value != null && _favoritesList.value!!.isNotEmpty()){
                         loadProducts()
                     }
@@ -86,4 +88,27 @@ class FavoritesViewModel : ViewModel() {
         }
     }
 
+    fun insertIntoCartDb(product:ProductModel, quantity:Long) = viewModelScope.launch {
+        insertIntoCart(product, quantity)
+    }
+
+    private suspend fun insertIntoCart(product:ProductModel, quantity:Long){
+        withContext(Dispatchers.IO){
+            AsyncTask.execute{
+                database.cartDao.insertProductsIntoDb(CartModel(product.id,product.productImage,product.title,product.currentPrice,product.oldPrice,1, product.quantity!!))
+                Log.d("div", "HomeViewModel L126 data saved")
+            }
+        }
+    }
+
+}
+
+class FavoritesViewModelFactory(val app: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(FavoritesViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return FavoritesViewModel(app) as T
+        }
+        throw IllegalArgumentException("Unable to construct viewmodel")
+    }
 }

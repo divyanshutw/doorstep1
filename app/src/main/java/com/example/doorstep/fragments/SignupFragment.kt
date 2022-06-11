@@ -29,11 +29,13 @@ class SignupFragment : Fragment() {
         val firstName: EditText = view.findViewById(R.id.edittext_firstName)
         val lastName: EditText = view.findViewById(R.id.edittext_lastName)
         val phoneNumber: EditText = view.findViewById(R.id.editText_phoneNumber)
+        Log.e("Signuo" ,firstName.text.toString() )
         val userdata = HashMap<String, Any>()
-        userdata["firstName"] = firstName.text.toString()
-        userdata["lastName"] = lastName.text.toString()
-        userdata["phoneNumber"] = phoneNumber.text.toString()
+
         submit.setOnClickListener {
+            userdata["firstName"] = firstName.text.toString()
+            userdata["lastName"] = lastName.text.toString()
+            userdata["phoneNumber"] = phoneNumber.text.toString()
             val firestore = FirebaseFirestore.getInstance()
             val auth = FirebaseAuth.getInstance()
             val reference = firestore.collection("Customers").document(
@@ -45,6 +47,7 @@ class SignupFragment : Fragment() {
                     firstName.text.toString() + ", welcome to DoorStep",
                     Toast.LENGTH_SHORT
                 ).show()
+                Log.e("Signuo" , "ojojoiioj$userdata")
                 startActivity(Intent(activity, CustomerHomeActivity::class.java))
             }.addOnFailureListener { e -> Log.e("SIGNUP ACTIVITY", e.message!!) }
         }

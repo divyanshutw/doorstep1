@@ -4,75 +4,99 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.CartFragment">
 
-    <ScrollView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView_cartHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/cart"
+            android:textColor="@color/text_black"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView_cartHeading"
-                android:layout_width="wrap_content"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_products"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView_cartHeading"
+            app:layout_constraintBottom_toTopOf="@id/textView_totalAmountHeading"
+            app:layout_constraintVertical_bias="0"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="353dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="38dp"
+            android:layout_marginEnd="20dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toTopOf="@+id/textView_totalAmountHeading"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView_products"
+            app:layout_constraintVertical_bias="0.828">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edittext_addressLine"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/textSizeHeading"
-                android:text="@string/cart"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:background="@android:color/transparent"
+                android:hint="@string/enter_delivery_address"
+                tools:ignore="TextContrastCheck,TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_products"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textView_cartHeading" />
+        <TextView
+            android:id="@+id/textView_totalAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/textView_totalAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                app:layout_constraintTop_toBottomOf="@id/textView_totalAmountHeading"
-                app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/textView_totalAmountHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="@string/total"
+            android:textColor="@color/text_black"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/textView_totalAmount"
+            tools:layout_editor_absoluteY="264dp" />
 
-            <TextView
-                android:id="@+id/textView_totalAmountHeading"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:text="@string/total"
-                android:textColor="@color/text_black"
-                android:textSize="@dimen/textSizeHeading"
-                app:layout_constraintTop_toBottomOf="@id/recyclerView_products"
-                app:layout_constraintStart_toStartOf="parent"/>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_checkout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_gradient_bg"
+            android:text="@string/checkout"
+            android:textAllCaps="false"
+            android:visibility="invisible"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_goneMarginEnd="16dp" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/button_checkout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/button_gradient_bg"
-                android:text="@string/checkout"
-                android:textAllCaps="false"
-                android:visibility="invisible"
-                app:layout_constraintTop_toBottomOf="@id/recyclerView_products"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_goneMarginEnd="16dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </ScrollView>
 
 
 

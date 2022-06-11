@@ -19,6 +19,7 @@ import org.json.JSONObject
 
 class PaymentActivityFinal : AppCompatActivity(), PaymentResultWithDataListener {
     private val alertDialogBuilder: AlertDialog.Builder? = null
+    private lateinit var order_id:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_payment)
@@ -50,7 +51,8 @@ class PaymentActivityFinal : AppCompatActivity(), PaymentResultWithDataListener 
                 Request.Method.POST, url, request,
                 { response -> //textView.setText("Response: " + response.toString());
                     Log.e("Payment Activity", response.toString())
-                    startPayment(response.getString("id"))
+                    order_id=response.getString("id")
+                    startPayment(order_id)
                 }
             ) { error -> Log.e("Payment Activity", error.message!!) }
 
@@ -83,9 +85,39 @@ class PaymentActivityFinal : AppCompatActivity(), PaymentResultWithDataListener 
         }
     }
 
+    private fun verifyPayment(orderID: String,paymentId:String,signature:String){
+        val url="https://us-central1-doorstep-4cf0f.cloudfunctions.net/verifyOrder"
+        val queue = Volley.newRequestQueue(this)
+        val request = JSONObject()
+        try {
+            request.put("order_id",orderID)
+            request.put("razorpayPaymentID", paymentId)
+            request.put("signature", signature)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST, url, request,
+            { response -> //textView.setText("Response: " + response.toString());
+                Log.e("Payment Activity", response.toString())
+                if(response["value"] as Boolean){
+                    startActivity(Intent(applicationContext,DeliveryMapsActivityFinal::class.java))
+                }else{
+                    Log.e("Payment Activity","Payment Not Verified")
+                }
+                //startPayment(response.getString("id"))
+            }
+        ) { error -> Log.e("Payment Activity", error.toString()) }
+
+        // Access the RequestQueue through your singleton class.
+        queue.add(jsonObjectRequest)
+    }
+
+
     override fun onPaymentSuccess(s: String, paymentData: PaymentData) {
-        Log.e("Payment Success", paymentData.paymentId+" "+ s)
-        startActivity(Intent(context,DeliveryMapsActivityFinal::class.java))
+        Log.e("Payment Success",  paymentData.paymentId+" "+ paymentData.signature)
+        verifyPayment(order_id,paymentData.paymentId,paymentData.signature)
+
 
     }    override fun onPaymentError(i: Int, s: String, paymentData: PaymentData) {
         Log.e("Payment Error", paymentData.paymentId+" "+ s)

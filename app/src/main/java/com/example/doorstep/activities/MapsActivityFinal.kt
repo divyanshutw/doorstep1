@@ -17,12 +17,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import java.io.IOException
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListener {
     private var mMap: GoogleMap? = null
@@ -34,6 +37,8 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
     var state: String? = null
     var country: String? = null
     var postalCode: String? = null
+    var lattitude: String?=null
+    var longitude:String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapsBinding.inflate(layoutInflater)
@@ -51,15 +56,32 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
                 address["tag"] = "Home"
                 address["isActive"] = true
                 address["Landmark"] = binding!!.edittextLandMark.text.toString()
+                address["lat"]=lattitude
+                address["long"]=longitude
                 val list = ArrayList<HashMap<String, Any?>>()
                 list.add(address)
-                data["address"] = list
+
                 Log.e("MAPS",data.toString());
-                firestore.collection("Customers").document(auth.uid!!)
-                    .set(data, SetOptions.merge()).addOnSuccessListener {
-                        startActivity(Intent(baseContext, CustomerHomeActivity::class.java))
-                        Log.e("MAPSACTIVITYFINAL","DATA SAVED")
-                    }.addOnFailureListener { }
+                firestore.collection("Customers").document(auth.uid!!).get().addOnSuccessListener(
+                    OnSuccessListener {
+                        var list1: ArrayList<HashMap<String, Any?>>?=null
+                        if (it["address"] != null) {
+                            list1 = it["address"] as ArrayList<HashMap<String,Any?>>
+                            for(item in list1){
+                                item["isActive"]=false
+                            }
+                        }
+                        list1?.add(address)
+                        data["address"] = list
+                        Log.e("MAPS ACTIITY FINAL",list1.toString())
+                        firestore.collection("Customers").document(auth.uid!!)
+                            .set(data, SetOptions.merge()).addOnSuccessListener {
+                                startActivity(Intent(baseContext, CustomerHomeActivity::class.java))
+                                Log.e("MAPSACTIVITYFINAL","DATA SAVED")
+                            }.addOnFailureListener { }
+
+                    })
+
             }
         }
 
@@ -163,11 +185,11 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
                 .title("Your Location")
         )
         mMap!!.moveCamera(
-            CameraUpdateFactory.newLatLng(
+            CameraUpdateFactory.newLatLngZoom(
                 LatLng(
                     location.latitude,
                     location.longitude
-                )
+                ),16.0f
             )
         )
         val geocoder: Geocoder
@@ -184,6 +206,9 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
         state = addresses[0].adminArea
         country = addresses[0].countryName
         postalCode = addresses[0].postalCode
+        lattitude=location.latitude.toString()
+        longitude=location.longitude.toString()
+
         Log.e("Maps Activity", "$address $city $state $country $postalCode")
         return address
     }

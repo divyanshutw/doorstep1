@@ -83,6 +83,17 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
         viewModel.favoritesList.observe(viewLifecycleOwner){
 
         }
+        viewModel.addressList.observe(viewLifecycleOwner){
+           for(item in it){
+               if(item["isActive"] as Boolean){
+                   if(item["AddressLine"].toString()!=null)
+                   binding.textViewAddress.setText(item["AddressLine"].toString())
+                   else
+                       startActivity(Intent(context, MapsActivityFinal::class.java))
+               }
+           }
+        }
+
     }
 
 

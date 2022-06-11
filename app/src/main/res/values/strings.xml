@@ -30,4 +30,10 @@
     <string name="orders">Orders</string>
     <string name="your_order">Your order</string>
     <string name="quantity">Quantity</string>
+    <string name="minutes_to_deliver">minutes to deliver</string>
+<string name="deliveryboyname">DeliveryBoyName</string>
+<string name="order_details">Order Details</string>
+<string name="calldeliveryboy">callDeliveryBoy</string>
+<string name="dropdownmenu">dropdownMenu</string>
+<string name="enter_delivery_address">Enter Delivery Address</string>
 </resources>

@@ -29,15 +29,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
-class LoginFragment : Fragment() {
+class   LoginFragment : Fragment() {
 
     lateinit var binding:FragmentLoginBinding
     lateinit var viewModel:LoginViewModel
@@ -95,8 +97,25 @@ class LoginFragment : Fragment() {
             }
             otpAuthentication[0]!!.setFragmentChangeListener(ChangeFragment { value: Boolean ->
                 if (value){
+                    val firebaseFirestore:FirebaseFirestore=FirebaseFirestore.getInstance()
+                    val firebaseAuth:FirebaseAuth= FirebaseAuth.getInstance()
+                    firebaseFirestore.collection("Customers").document(firebaseAuth.uid.toString()).get().addOnCompleteListener(
+                        OnCompleteListener { if (it.isSuccessful) {
+                            val document = it.result
+                            if(document != null) {
+                                if (document.exists()) {
+                                    startActivity(Intent(context,CustomerHomeActivity::class.java))
+                                } else {
+                                    Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_signupFragment)
+                                }
+                            }else{
+                                Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_signupFragment)
+                            }
+                        } else {
+                            Log.e("TAG", "Error: ", it.exception)
+                        } })
                     Log.e("CHANGE CREATED87y7","FUNCTION ENTERED")
-                    Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_signupFragment)
+
                 }
             })
         }
@@ -202,6 +221,7 @@ class LoginFragment : Fragment() {
         Log.e("CHANGE UI",phoneNUmberContainer.isVisible.toString())
 
     }
+
 
 
 }

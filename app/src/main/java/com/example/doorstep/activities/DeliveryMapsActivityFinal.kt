@@ -53,8 +53,9 @@ class DeliveryMapsActivityFinal : FragmentActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
 
-        getAddress()
+
         mMap = googleMap
+        getAddress()
 //        val client = OkHttpClient()
 //        val request = Request.Builder()
 //            .url("https://maps.googleapis.com/maps/api/directions/json?origin=5th Mail, Lane No. 4, Near Maruti Mandir, Dharm Nagar,, Wadgaonsheri,, near Upala Hotel, Somnath Nagar, Wadgaon Sheri, Pune, Maharashtra 411014, India&destination=183, GS Rd, Dispur, Christian Basti, Guwahati, Assam 781005&key=" + "AIzaSyDwnoXcQJ47WErq1rInr3cYS5Z1vEC6FEg")
@@ -79,9 +80,9 @@ class DeliveryMapsActivityFinal : FragmentActivity(), OnMapReadyCallback {
 
 
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(18.8203748, 74.35549589999999)
-        mMap!!.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+//        val sydney = LatLng(18.8203748, 74.35549589999999)
+//        mMap!!.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+//        mMap!!.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
     private fun changeUI(jsonTemp: JSONObject) {
@@ -143,6 +144,7 @@ class DeliveryMapsActivityFinal : FragmentActivity(), OnMapReadyCallback {
                 val response = client.newCall(request).execute()
                 val resStr = response.body().string()
                 json = JSONObject(resStr)
+                Log.e("DeliveryMaps",json.toString())
                 val jsonTemp = JSONObject(json.getJSONArray("routes")[0].toString())
                 runOnUiThread(Runnable { changeUI(jsonTemp) })
 

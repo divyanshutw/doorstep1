@@ -15,6 +15,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class HomeViewModel(application: Application): AndroidViewModel(application){
 
@@ -29,6 +31,9 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
 
     private val _favoritesList = MutableLiveData<ArrayList<String>>()
     val favoritesList:LiveData<ArrayList<String>> = _favoritesList
+
+    private val _address_List = MutableLiveData<ArrayList<Map<String,Objects>>>()
+    val addressList:LiveData<ArrayList<Map<String,Objects>>> = _address_List
 
     var user:DocumentSnapshot? = null
 
@@ -60,6 +65,12 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
                         Log.d("div", "HomeViewModel L58 ${_favoritesList.value}")
                     }.addOnFailureListener {
                         Log.e("div", "HomeViewModel L60 ${it.message}")
+                        Log.d("div", "HomeViewModel L50 ${_favoritesList.value?.get(0)}")
+                        if(it.get("address")!=null)
+                        _address_List.value=it.get("address") as ArrayList<Map<String, Objects>>
+
+                    }.addOnFailureListener {
+                        Log.e("div", "HomeViewModel L51 ${it.message}")
                     }
             }
         }

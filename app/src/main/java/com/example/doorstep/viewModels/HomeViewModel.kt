@@ -45,8 +45,8 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
         firestore = FirebaseFirestore.getInstance()
         viewModelScope.launch {
             fetchFavoritesAndAddress()
+            fetchProducts("all")
             fetchCategories()
-            fetchProducts("dairy")
         }
     }
 
@@ -63,14 +63,12 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
                             _favoritesList.value = arrayListOf()
                         }
                         Log.d("div", "HomeViewModel L58 ${_favoritesList.value}")
+
+                        if(it.get("address")!=null)
+                            _address_List.value=it.get("address") as ArrayList<Map<String, Objects>>
                     }.addOnFailureListener {
                         Log.e("div", "HomeViewModel L60 ${it.message}")
                         Log.d("div", "HomeViewModel L50 ${_favoritesList.value?.get(0)}")
-                        if(it.get("address")!=null)
-                        _address_List.value=it.get("address") as ArrayList<Map<String, Objects>>
-
-                    }.addOnFailureListener {
-                        Log.e("div", "HomeViewModel L51 ${it.message}")
                     }
             }
         }
@@ -92,10 +90,11 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
     private suspend fun fetchCategories() {
         withContext(Dispatchers.IO){
             var list = arrayListOf<CategoryModel>()
+            list.add(CategoryModel("0", "All Porducts", "", true))
             FirebaseFirestore.getInstance().collection("Categories").get()
                 .addOnSuccessListener {
                     for(document in it){
-                        Log.d("div", "HomeViewModel L64 ${document.getString("name").toString()}")
+                        Log.d("div", "HomeViewModel L64 ${document.getString("image").toString()}")
                         list.add(CategoryModel(document.id, document.getString("name").toString(), document.getString("image").toString(), false))
                     }
                     _categoriesList.value = list
@@ -105,34 +104,47 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
         }
     }
 
-    fun fetchProducts(category: String) {
-        Log.d("div", "HomeViewModel L74 $category")
-        var list = arrayListOf<ProductModel>()
-        FirebaseFirestore.getInstance().collection("Products").whereEqualTo("category", category).get()
-            .addOnSuccessListener {
-                Log.d("div", "HomeViewModel L78 success ${it.size()}")
-                for(document in it){
-                    Log.d("div", "HomeViewModel L80 ${document.getString("title").toString()}")
+    fun fetchProductsScope(category: String){
+        viewModelScope.launch {
+            fetchProducts(category)
+        }
+    }
 
-                    val listItem = ProductModel(
-                        document.id,
-                        document.getString("productImage").toString(),
-                        document.getString("title").toString(),
-                        document.getLong("quantity"),
-                        document.getString("currentPrice"),
-                        document.getString("oldPrice"),
-                        false)
+    private suspend fun fetchProducts(category: String) {
+        withContext(Dispatchers.IO) {
+            Log.d("div", "HomeViewModel L74 $category")
+            var list = arrayListOf<ProductModel>()
+            val documentList = if (category == "all")
+                FirebaseFirestore.getInstance().collection("Products")
+            else
+                FirebaseFirestore.getInstance().collection("Products").whereEqualTo("category", category)
+            documentList.get()
+                .addOnSuccessListener {
+                    Log.d("div", "HomeViewModel L78 success ${it.size()}")
+                    for (document in it) {
+                        Log.d("div", "HomeViewModel L80 ${document.getString("title").toString()}")
 
-                    if(favoritesList.value != null)
-                        listItem.isFavorite = _favoritesList.value!!.contains(document.id)
+                        val listItem = ProductModel(
+                            document.id,
+                            document.getString("productImage").toString(),
+                            document.getString("title").toString(),
+                            document.getLong("quantity"),
+                            document.getString("currentPrice"),
+                            document.getString("oldPrice"),
+                            false
+                        )
 
-                    list.add(listItem)
+                        if (favoritesList.value != null)
+                            listItem.isFavorite = _favoritesList.value!!.contains(document.id)
 
+                        list.add(listItem)
+
+                    }
+                    _productsList.value = list
+                }.addOnFailureListener {
+                    Log.e("div", "HomeViewModel L99 $it")
                 }
-                _productsList.value = list
-            }.addOnFailureListener {
-                Log.e("div", "HomeViewModel L99 $it")
-            }
+        }
     }
 
     fun insertIntoCartDb(product:ProductModel, quantity:Long) = viewModelScope.launch {

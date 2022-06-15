@@ -42,8 +42,7 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
         viewModel = ViewModelProvider(this, HomeViewModelFactory(requireActivity().application))
             .get(HomeViewModel::class.java)
 
-        //viewModel.fetchCategories()
-        //viewModel.fetchProducts("Vegetables")
+
         initObservers()
         initOnClickListeners()
 
@@ -110,7 +109,7 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
 //        binding.recyclerViewCategories.adapter!!.notifyItemChanged(activeItemPos)
 //        binding.recyclerViewCategories.adapter!!.notifyItemChanged(position)
 
-        viewModel.fetchProducts(categoriesList[position].name)
+        viewModel.fetchProductsScope(categoriesList[position].name)
         binding.textViewCategoryHeading.text = categoriesList[position].name
     }
 

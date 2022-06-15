@@ -54,7 +54,7 @@ class PaymentActivityFinal : AppCompatActivity(), PaymentResultWithDataListener 
                     order_id=response.getString("id")
                     startPayment(order_id)
                 }
-            ) { error -> Log.e("Payment Activity", error.message!!) }
+            ) { error -> Log.e("Payment Activity", error.toString()) }
 
             // Access the RequestQueue through your singleton class.
             queue.add(jsonObjectRequest)
@@ -101,7 +101,8 @@ class PaymentActivityFinal : AppCompatActivity(), PaymentResultWithDataListener 
             { response -> //textView.setText("Response: " + response.toString());
                 Log.e("Payment Activity", response.toString())
                 if(response["value"] as Boolean){
-                    startActivity(Intent(applicationContext,DeliveryMapsActivityFinal::class.java))
+                    //startActivity(Intent(applicationContext,DeliveryMapsActivityFinal::class.java))
+                    startActivity(Intent(applicationContext, CustomerHomeActivity::class.java))
                 }else{
                     Log.e("Payment Activity","Payment Not Verified")
                 }

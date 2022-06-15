@@ -7,28 +7,6 @@
         <entry key="app/src/main/res/drawable/edittext_round.xml" value="0.228" />
         <entry key="app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.1" />
-        <entry key="app/src/main/res/drawable/product_bg.xml" value="0.183" />
-        <entry key="app/src/main/res/drawable/rounded_corner_bg.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_customer_home.xml" value="0.19375" />
-        <entry key="app/src/main/res/layout/activity_login.xml" value="0.3089019775390624" />
-        <entry key="app/src/main/res/layout/activity_maps.xml" value="0.2328125" />
-        <entry key="app/src/main/res/layout/activity_maps_final.xml" value="0.2328125" />
-        <entry key="app/src/main/res/layout/cart_item.xml" value="0.15104166666666666" />
-        <entry key="app/src/main/res/layout/category_list_item.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_cart.xml" value="0.15104166666666666" />
-        <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1990966796875" />
-        <entry key="app/src/main/res/layout/fragment_orders_products.xml" value="0.25116082735331363" />
-        <entry key="app/src/main/res/layout/fragment_painting.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.15520833333333334" />
-        <entry key="app/src/main/res/layout/fragment_signup_test.xml" value="0.21875" />
-        <entry key="app/src/main/res/layout/item_product.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/list_item_cart.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/list_item_order.xml" value="0.2912948608398438" />
-        <entry key="app/src/main/res/layout/list_item_order_products.xml" value="0.2543822146216332" />
-        <entry key="app/src/main/res/layout/list_item_product.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/logout_design.xml" value="0.4244791666666667" />
         <entry key="app/src/main/res/drawable/maps_block.xml" value="0.1745" />
         <entry key="app/src/main/res/drawable/product_bg.xml" value="0.183" />
         <entry key="app/src/main/res/drawable/rounded_corner_bg.xml" value="0.1" />
@@ -46,13 +24,17 @@
         <entry key="app/src/main/res/layout/fragment_favorites.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.1990966796875" />
+        <entry key="app/src/main/res/layout/fragment_orders_products.xml" value="0.25116082735331363" />
         <entry key="app/src/main/res/layout/fragment_painting.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.15520833333333334" />
         <entry key="app/src/main/res/layout/fragment_signup.xml" value="0.23229166666666667" />
         <entry key="app/src/main/res/layout/fragment_signup_test.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/item_product.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/layout/list_item_cart.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/list_item_category.xml" value="0.4244791666666667" />
-        <entry key="app/src/main/res/layout/list_item_product.xml" value="0.29814814814814816" />
+        <entry key="app/src/main/res/layout/list_item_order.xml" value="0.2912948608398438" />
+        <entry key="app/src/main/res/layout/list_item_order_products.xml" value="0.2543822146216332" />
+        <entry key="app/src/main/res/layout/list_item_product.xml" value="0.27447204589843766" />
         <entry key="app/src/main/res/layout/logout_design.xml" value="0.4244791666666667" />
         <entry key="app/src/main/res/layout/maps_block.xml" value="0.23229166666666667" />
         <entry key="app/src/main/res/layout/prefernce_design.xml" value="0.40518086751302074" />

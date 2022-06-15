@@ -8,8 +8,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.doorstep.R
 import com.example.doorstep.models.CategoryModel
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
 
 class HomeFragmentCategoryRecyclerAdapter(
     var itemList: ArrayList<CategoryModel>,
@@ -52,6 +56,24 @@ class HomeFragmentCategoryRecyclerAdapter(
         fun bind(categoryModel: CategoryModel) {
             val imageView = itemView.findViewById<ImageView>(R.id.imageView_categoryImg)
             val textView = itemView.findViewById<TextView>(R.id.textView_categoryName)
+
+            if(categoryModel.image != ""){
+                Firebase.storage.reference.child("categories/milk.png").downloadUrl.addOnSuccessListener {
+                    Picasso
+                        .get()
+                        .load(it)
+                        .into(imageView);
+//                    Glide
+//                        .with(imageView.context)
+//                        .load(it)
+//                        .into(imageView)
+                }.addOnFailureListener {
+                    Log.e("div", "HomeFragmentCategoryRecyclerAdapter L65 $it")
+                }
+            }
+
+
+
             //imageView.setImageResource((categoryModel.image))
             imageView.setImageResource(R.drawable.fruits)
             textView.text = categoryModel.name

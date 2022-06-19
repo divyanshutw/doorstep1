@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.example.doorstep.R
+import com.example.doorstep.activities.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -23,6 +24,7 @@ class ProfileFragment : PreferenceFragmentCompat() {
         val aboutAppPrefernce:Preference?=findPreference("about")
         logoutPrefernce?.setOnPreferenceClickListener {
             FirebaseAuth.getInstance().signOut()
+            startActivity(Intent(context,LoginActivity::class.java))
             true
         }
         helpAndSupportPrefernce?.setOnPreferenceClickListener {

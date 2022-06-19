@@ -83,14 +83,23 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
 
         }
         viewModel.addressList.observe(viewLifecycleOwner){
-           for(item in it){
-               if(item["isActive"] as Boolean){
-                   if(item["AddressLine"].toString()!=null)
-                   binding.textViewAddress.setText(item["AddressLine"].toString())
-                   else
-                       startActivity(Intent(context, MapsActivityFinal::class.java))
-               }
-           }
+            Log.e("Home fragment", it.size.toString())
+            if(it.size != 0){
+                for(item in it){
+                    if(item["isActive"] as Boolean) {
+                        if (item["AddressLine"] != null) {
+                            binding.textViewAddress.setText(item["AddressLine"].toString())
+                            Log.e("Home fragment", item["AddressLine"].toString())
+                        }
+                    }
+                }
+            }
+            else{
+                    Log.e("Home fragment","Address not set")
+
+                    startActivity(Intent(context, MapsActivityFinal::class.java))
+            }
+
         }
 
     }

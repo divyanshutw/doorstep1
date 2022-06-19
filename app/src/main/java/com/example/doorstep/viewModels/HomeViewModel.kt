@@ -66,6 +66,8 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
 
                         if(it.get("address")!=null)
                             _address_List.value=it.get("address") as ArrayList<Map<String, Objects>>
+                        else
+                            _address_List.value=ArrayList<Map<String, Objects>>()
                     }.addOnFailureListener {
                         Log.e("div", "HomeViewModel L60 ${it.message}")
                         Log.d("div", "HomeViewModel L50 ${_favoritesList.value?.get(0)}")

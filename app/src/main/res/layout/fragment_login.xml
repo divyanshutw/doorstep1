@@ -54,12 +54,12 @@
                 android:id="@+id/button_getOtp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/button_gradient_bg"
                 android:hint="@string/get_otp"
                 android:inputType="phone"
                 android:padding="8dp"
-                android:textColor="#FFFFFF" />
+                android:textColor="@color/white"
+                android:layout_marginTop="16dp"/>
 
         </LinearLayout>
 
@@ -95,12 +95,12 @@
                 android:id="@+id/button_checkOtp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/button_gradient_bg"
                 android:hint="@string/submit_otp"
                 android:inputType="phone"
                 android:padding="8dp"
-                android:textColor="#FFFFFF" />
+                android:textColor="@color/white"
+                android:layout_marginTop="16dp"/>
 
         </LinearLayout>
 

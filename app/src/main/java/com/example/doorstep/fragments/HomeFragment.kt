@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import com.example.doorstep.R
 import com.example.doorstep.activities.CartActivity
 import com.example.doorstep.activities.MapsActivityFinal
@@ -113,14 +114,23 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
             }
         }
         viewModel.addressList.observe(viewLifecycleOwner){
-           for(item in it){
-               if(item["isActive"] as Boolean){
-                   if(item["AddressLine"].toString()!=null)
-                       binding.textViewAddress.text = item["AddressLine"].toString()
-                   else
-                       startActivity(Intent(context, MapsActivityFinal::class.java))
-               }
-           }
+            Log.e("Home fragment", it.size.toString())
+            if(it.size != 0){
+                for(item in it){
+                    if(item["isActive"] as Boolean) {
+                        if (item["AddressLine"] != null) {
+                            binding.textViewAddress.setText(item["AddressLine"].toString())
+                            Log.e("Home fragment", item["AddressLine"].toString())
+                        }
+                    }
+                }
+            }
+            else{
+                    Log.e("Home fragment","Address not set")
+
+                    startActivity(Intent(context, MapsActivityFinal::class.java))
+            }
+
         }
         viewModel.isLoadingDialogVisible.observe(viewLifecycleOwner){
             if(it != null){
@@ -176,6 +186,4 @@ class HomeFragment : Fragment(), HomeFragmentCategoryRecyclerAdapter.CategoryLis
         viewModel.insertIntoCartDb(viewModel.productsList.value?.get(position)!!, 1)
         Toast.makeText(this.context, "1 Item added to cart", Toast.LENGTH_SHORT).show()
     }
-
-
 }

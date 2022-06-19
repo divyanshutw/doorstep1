@@ -228,6 +228,6 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
     }
 
     override fun onBackPressed() {
-        startActivity(Intent(this, CustomerHomeActivity::class.java))
+        super.onBackPressed()
     }
 }

@@ -87,6 +87,8 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
 
                         if(it.get("address")!=null)
                             _address_List.value=it.get("address") as ArrayList<Map<String, Objects>>
+                        else
+                            _address_List.value=ArrayList<Map<String, Objects>>()
                         isLoadingDialogVisible.value = false
                     }.addOnFailureListener {
                         Log.e("div", "HomeViewModel L60 ${it.message}")
@@ -143,7 +145,6 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
         isLoadingDialogVisible.value = true
         withContext(Dispatchers.IO) {
             Log.d("div", "HomeViewModel L74 $category")
-
             var list = arrayListOf<ProductModel>()
             val documentList = if (category == "All Products")
                 FirebaseFirestore.getInstance().collection("Products")
@@ -172,10 +173,8 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
 
                     }
                     _productsList.value = list
-                    isLoadingDialogVisible.value = false
                 }.addOnFailureListener {
                     Log.e("div", "HomeViewModel L99 $it")
-                    isLoadingDialogVisible.value = false
                 }
         }
     }

@@ -55,7 +55,7 @@ class DeliveryMapsActivityFinal : FragmentActivity(), OnMapReadyCallback {
 
 
         mMap = googleMap
-        getAddress()
+//        getAddress()
 //        val client = OkHttpClient()
 //        val request = Request.Builder()
 //            .url("https://maps.googleapis.com/maps/api/directions/json?origin=5th Mail, Lane No. 4, Near Maruti Mandir, Dharm Nagar,, Wadgaonsheri,, near Upala Hotel, Somnath Nagar, Wadgaon Sheri, Pune, Maharashtra 411014, India&destination=183, GS Rd, Dispur, Christian Basti, Guwahati, Assam 781005&key=" + "AIzaSyDwnoXcQJ47WErq1rInr3cYS5Z1vEC6FEg")

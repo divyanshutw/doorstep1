@@ -10,6 +10,7 @@ import com.example.doorstep.models.CartModel
 import com.example.doorstep.models.ProductModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 
@@ -26,15 +27,18 @@ class FavoritesViewModel(application: Application): AndroidViewModel(application
 
     private val database: CartDatabase = getDatabase(application)
 
+    val isLoadingDialogVisible = MutableLiveData<Boolean>(false)
+
     init{
         viewModelScope.launch {
             loadFavorites()
         }
     }
 
-    private fun loadFavorites() {
+    fun loadFavorites() {
         val uid = Firebase.auth.uid
         if(uid != null){
+            isLoadingDialogVisible.value = true
             FirebaseFirestore.getInstance().collection("Customers").document(uid).get()
                 .addOnSuccessListener {
                     Log.d("div", "FavoritesViewModel L39 ${Firebase.auth.currentUser!!.uid}")
@@ -43,14 +47,17 @@ class FavoritesViewModel(application: Application): AndroidViewModel(application
                     if(_favoritesList.value != null && _favoritesList.value!!.isNotEmpty()){
                         loadProducts()
                     }
+                    isLoadingDialogVisible.value = false
                 }.addOnFailureListener {
                     Log.e("div", "FavoritesViewModel L35 $it")
+                    isLoadingDialogVisible.value = false
                 }
         }
     }
 
     private fun loadProducts() {
         var list = arrayListOf<ProductModel>()
+        isLoadingDialogVisible.value = true
         FirebaseFirestore.getInstance().collection("Products").get()
             .addOnSuccessListener {
                 Log.d("div", "FavoritesViewModel L54 ${it.size()}")
@@ -71,19 +78,24 @@ class FavoritesViewModel(application: Application): AndroidViewModel(application
                     }
                 }
                 _productsList.value = list
+                isLoadingDialogVisible.value = false
             }.addOnFailureListener {
                 Log.e("div", "FavoritesViewModel L47 $it")
+                isLoadingDialogVisible.value = false
             }
     }
 
     fun toggleFavorite(){
         val uid = Firebase.auth.currentUser?.uid
         if(uid != null){
-            FirebaseFirestore.getInstance().collection("Customers").document(uid).update("favorites", favoritesList)
+            isLoadingDialogVisible.value = true
+            FirebaseFirestore.getInstance().collection("Customers").document(uid).set(hashMapOf("favorites" to favoritesList.value), SetOptions.merge())
                 .addOnSuccessListener {
                     Log.d("div", "FavoritesViewModel L80 favorites updated")
+                    isLoadingDialogVisible.value = false
                 }.addOnFailureListener {
                     Log.d("div", "FavoritesViewModel L82 $it")
+                    isLoadingDialogVisible.value = false
                 }
         }
     }

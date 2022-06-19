@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.example.doorstep.R
 import com.example.doorstep.databinding.ActivityMapsBinding
+import com.example.doorstep.utilities.AppNetworkStatus
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -45,43 +47,14 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
         setContentView(binding!!.root)
         addressLine = binding!!.edittextAddressLine
         binding!!.buttonSubmit.setOnClickListener {
-            if (!binding!!.edittextBuildingName.editableText.equals("")) {
-                val firestore = FirebaseFirestore.getInstance()
-                val auth = FirebaseAuth.getInstance()
-                val data = HashMap<String, Any>()
-                val address = HashMap<String, Any?>()
-                address["AddressLine"] = this.address
-                address["BuildingName"] = binding!!.edittextBuildingName.text.toString()
-                address["pinCode"] = postalCode
-                address["tag"] = "Home"
-                address["isActive"] = true
-                address["Landmark"] = binding!!.edittextLandMark.text.toString()
-                address["lat"]=lattitude
-                address["long"]=longitude
-                val list = ArrayList<HashMap<String, Any?>>()
-                list.add(address)
-
-                Log.e("MAPS",data.toString());
-                firestore.collection("Customers").document(auth.uid!!).get().addOnSuccessListener(
-                    OnSuccessListener {
-                        var list1: ArrayList<HashMap<String, Any?>>?=null
-                        if (it["address"] != null) {
-                            list1 = it["address"] as ArrayList<HashMap<String,Any?>>
-                            for(item in list1){
-                                item["isActive"]=false
-                            }
-                        }
-                        list1?.add(address)
-                        data["address"] = list
-                        Log.e("MAPS ACTIITY FINAL",list1.toString())
-                        firestore.collection("Customers").document(auth.uid!!)
-                            .set(data, SetOptions.merge()).addOnSuccessListener {
-                                startActivity(Intent(baseContext, CustomerHomeActivity::class.java))
-                                Log.e("MAPSACTIVITYFINAL","DATA SAVED")
-                            }.addOnFailureListener { }
-
-                    })
-
+            if(AppNetworkStatus.getInstance(this).isOnline) {
+                onClickSubmit()
+            }
+            else{
+                Snackbar.make(binding!!.layout,getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.retry)){
+                        onClickSubmit()
+                    }.show()
             }
         }
 
@@ -89,6 +62,47 @@ class MapsActivityFinal : FragmentActivity(), OnMapReadyCallback, LocationListen
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
+    }
+
+    private fun onClickSubmit() {
+        if (!binding!!.edittextBuildingName.editableText.equals("")) {
+            val firestore = FirebaseFirestore.getInstance()
+            val auth = FirebaseAuth.getInstance()
+            val data = HashMap<String, Any>()
+            val address = HashMap<String, Any?>()
+            address["AddressLine"] = this.address
+            address["BuildingName"] = binding!!.edittextBuildingName.text.toString()
+            address["pinCode"] = postalCode
+            address["tag"] = "Home"
+            address["isActive"] = true
+            address["Landmark"] = binding!!.edittextLandMark.text.toString()
+            address["lat"]=lattitude
+            address["long"]=longitude
+            val list = ArrayList<HashMap<String, Any?>>()
+            list.add(address)
+
+            Log.e("MAPS",data.toString());
+            firestore.collection("Customers").document(auth.uid!!).get().addOnSuccessListener(
+                OnSuccessListener {
+                    var list1: ArrayList<HashMap<String, Any?>>?=null
+                    if (it["address"] != null) {
+                        list1 = it["address"] as ArrayList<HashMap<String,Any?>>
+                        for(item in list1){
+                            item["isActive"]=false
+                        }
+                    }
+                    list1?.add(address)
+                    data["address"] = list
+                    Log.e("MAPS ACTIITY FINAL",list1.toString())
+                    firestore.collection("Customers").document(auth.uid!!)
+                        .set(data, SetOptions.merge()).addOnSuccessListener {
+                            startActivity(Intent(baseContext, CustomerHomeActivity::class.java))
+                            Log.e("MAPSACTIVITYFINAL","DATA SAVED")
+                        }.addOnFailureListener { }
+
+                })
+
+        }
     }
 
     /**

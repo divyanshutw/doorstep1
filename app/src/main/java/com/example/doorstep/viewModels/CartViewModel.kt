@@ -26,6 +26,8 @@ class CartViewModel(application: Application): AndroidViewModel(application) {
 
     var totalPrice = MutableLiveData<Long>()
 
+    val isLoadingDialogVisible = MutableLiveData<Boolean>(false)
+
     init {
     }
 
@@ -63,6 +65,7 @@ class CartViewModel(application: Application): AndroidViewModel(application) {
             "status" to "Order placed"
         )
         Log.d("div", "CartViewModel L65 ${docData["totalPrice"]} ${FirebaseAuth.getInstance().currentUser!!.uid}")
+        isLoadingDialogVisible.value = true
         FirebaseFirestore.getInstance()
             .collection("Customers")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -88,9 +91,11 @@ class CartViewModel(application: Application): AndroidViewModel(application) {
                     }
                 Log.d("div", "CartViewModel L89${FirebaseAuth.getInstance().currentUser!!.uid}")
                 Log.d("div", "CartViewModel L90 data saved in database")
+                isLoadingDialogVisible.value = false
             }
             .addOnFailureListener {
                 Log.d("div", "CartViewModel L93 $it")
+                isLoadingDialogVisible.value = false
             }
     }
 

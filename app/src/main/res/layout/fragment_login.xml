@@ -54,11 +54,12 @@
                 android:id="@+id/button_getOtp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/button_gradient_bg"
-                android:hint="@string/mobile_number"
+                android:hint="@string/get_otp"
                 android:inputType="phone"
                 android:padding="8dp"
-                android:layout_marginTop="16dp"/>
+                android:textColor="#FFFFFF" />
 
         </LinearLayout>
 
@@ -84,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:background="@drawable/edittext_round"
-                android:hint="OTP"
+                android:hint="@string/otp"
                 android:inputType="phone"
                 android:textColorHint="@color/black"
                 android:textColor="@color/black"
@@ -94,17 +95,19 @@
                 android:id="@+id/button_checkOtp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/button_gradient_bg"
-                android:hint="Submit OTP"
+                android:hint="@string/submit_otp"
                 android:inputType="phone"
                 android:padding="8dp"
-                android:layout_marginTop="16dp"/>
+                android:textColor="#FFFFFF" />
 
         </LinearLayout>
 
 <!--        "OR" text design-->
 
         <RelativeLayout
+            android:visibility="invisible"
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,6 +146,7 @@
         </RelativeLayout>
 
         <ImageButton
+            android:visibility="invisible"
             android:id="@+id/main_google_login"
             android:layout_width="184dp"
             android:layout_height="40dp"

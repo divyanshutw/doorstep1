@@ -11,6 +11,11 @@
         android:icon="@drawable/ic_baseline_fact_check_24"
         android:title="@string/orders" />
 
+<!--    <item-->
+<!--        android:id="@+id/navigation_cart"-->
+<!--        android:icon="@drawable/ic_baseline_shopping_cart_24"-->
+<!--        android:title="@string/cart" />-->
+
     <item
         android:id="@+id/navigation_favorites"
         android:icon="@drawable/ic_baseline_favorite_24"

@@ -10,14 +10,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import com.example.doorstep.R
 import com.example.doorstep.activities.CustomerHomeActivity
+import com.example.doorstep.utilities.Dialogs
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 
 class SignupFragment : Fragment() {
 
+    val isLoadingDialogVisible = MutableLiveData<Boolean>(false)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +54,20 @@ class SignupFragment : Fragment() {
                 startActivity(Intent(activity, CustomerHomeActivity::class.java))
             }.addOnFailureListener { e -> Log.e("SIGNUP ACTIVITY", e.message!!) }
         }
+
+        initObservers()
+
         return view
+    }
+
+    private fun initObservers() {
+        isLoadingDialogVisible.observe(viewLifecycleOwner){
+            if(it != null){
+                if(it){
+                    val dialogs = Dialogs(requireContext(), viewLifecycleOwner)
+                    dialogs.showLoadingDialog(isLoadingDialogVisible)
+                }
+            }
+        }
     }
 }

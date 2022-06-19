@@ -34,6 +34,6 @@ class CustomerHomeActivity : AppCompatActivity() {
 
 
 
-//        supportActionBar!!.hide()
+        supportActionBar!!.hide()
     }
 }

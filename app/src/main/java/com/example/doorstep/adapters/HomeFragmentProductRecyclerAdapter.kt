@@ -1,6 +1,7 @@
 package com.example.doorstep.adapters
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.doorstep.R
 import com.example.doorstep.models.CategoryModel
 import com.example.doorstep.models.ProductModel
+import com.example.doorstep.utilities.ImageLoading
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
 
 class HomeFragmentProductRecyclerAdapter (
     var itemList: ArrayList<ProductModel>,
@@ -64,9 +69,10 @@ RecyclerView.Adapter<HomeFragmentProductRecyclerAdapter.ViewHolder>() {
             val textViewPrice = itemView.findViewById<TextView>(R.id.textView_productPrice)
             val imageButtonFavorite = itemView.findViewById<ImageButton>(R.id.imageButton_favorite)
             val imageButtonAddToCart = itemView.findViewById<ImageButton>(R.id.imageButton_addToCart)
-//            imageView.setImageResource((productModel.productImage).toInt())
             if(productModel.quantity!! > 0){
-                imageView.setImageResource(R.drawable.carrots)
+                if(productModel.productImage != ""){
+                    ImageLoading().loadImage(productModel.productImage, imageView)
+                }
             }
             else{
                 imageView.setImageResource(R.drawable.out_of_stock)
@@ -78,6 +84,10 @@ RecyclerView.Adapter<HomeFragmentProductRecyclerAdapter.ViewHolder>() {
             if(productModel.isFavorite){
                 imageButtonFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
             }
+            textViewOldPrice.apply {
+                paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            }
+
 
         }
     }

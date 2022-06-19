@@ -13,15 +13,33 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.doorstep.R
 import com.example.doorstep.adapters.HomeFragmentProductRecyclerAdapter
 import com.example.doorstep.databinding.FragmentFavoritesBinding
+import com.example.doorstep.utilities.AppNetworkStatus
+import com.example.doorstep.utilities.Dialogs
 import com.example.doorstep.viewModels.FavoritesViewModel
 import com.example.doorstep.viewModels.FavoritesViewModelFactory
 import com.example.doorstep.viewModels.HomeViewModel
 import com.example.doorstep.viewModels.HomeViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 
 class FavoritesFragment : Fragment(), HomeFragmentProductRecyclerAdapter.ProductListener {
 
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var viewModel: FavoritesViewModel
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("div","FavoritesFragment L28")
+        viewModel.loadFavorites()
+        if(AppNetworkStatus.getInstance(requireContext()).isOnline) {
+            viewModel.loadFavorites()
+        }
+        else{
+            Snackbar.make(binding.layout,getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.retry)){
+                    viewModel.loadFavorites()
+                }.show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,8 +49,7 @@ class FavoritesFragment : Fragment(), HomeFragmentProductRecyclerAdapter.Product
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_favorites, container, false)
         binding.lifecycleOwner = this
 
-        viewModel = ViewModelProvider(this, FavoritesViewModelFactory(requireActivity().application))
-            .get(FavoritesViewModel::class.java)
+        viewModel = ViewModelProvider(this, FavoritesViewModelFactory(requireActivity().application))[FavoritesViewModel::class.java]
 
         initObservers()
 
@@ -41,16 +58,41 @@ class FavoritesFragment : Fragment(), HomeFragmentProductRecyclerAdapter.Product
 
     private fun initObservers() {
         viewModel.productsList.observe(viewLifecycleOwner){
-            val productsList = viewModel.productsList.value
-            if(productsList != null && productsList.size > 0){
-                val productsAdapter = HomeFragmentProductRecyclerAdapter(productsList, this)
-                binding.recyclerViewProducts.adapter = productsAdapter
-                Log.d("div", "FavoritesFragment L60 productsList: ${productsList.size}")
+            if(it != null){
+                if(it.isNotEmpty()){
+                    val productsAdapter = HomeFragmentProductRecyclerAdapter(it, this)
+                    binding.recyclerViewProducts.adapter = productsAdapter
+                    Log.d("div", "FavoritesFragment L60 productsList: ${it.size}")
+                }
+                else{
+                    binding.textViewFavoritesHeading.text = getString(R.string.no_favorites_set)
+                    binding.textViewFavoritesHeading.textSize = 30F
+                }
+            }
+        }
+        viewModel.isLoadingDialogVisible.observe(viewLifecycleOwner){
+            if(it != null){
+                if(it){
+                    val dialogs = Dialogs(requireContext(), viewLifecycleOwner)
+                    dialogs.showLoadingDialog(viewModel.isLoadingDialogVisible)
+                }
             }
         }
     }
 
     override fun onClickFavorite(itemView: View, position: Int) {
+        if(AppNetworkStatus.getInstance(requireContext()).isOnline) {
+            onClickFavorite1(itemView, position)
+        }
+        else{
+            Snackbar.make(binding.layout,getString(R.string.no_internet_connection), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.retry)){
+                    onClickFavorite1(itemView, position)
+                }.show()
+        }
+    }
+
+    private fun onClickFavorite1(itemView: View, position: Int) {
         val buttonFavorite = itemView.findViewById<ImageButton>(R.id.imageButton_favorite)
         var isFavorite = viewModel.productsList.value!![position].isFavorite
         isFavorite = !isFavorite

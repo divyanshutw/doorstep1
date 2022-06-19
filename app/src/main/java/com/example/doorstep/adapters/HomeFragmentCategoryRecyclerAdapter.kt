@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.doorstep.R
 import com.example.doorstep.models.CategoryModel
+import com.example.doorstep.utilities.ImageLoading
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
@@ -58,18 +59,7 @@ class HomeFragmentCategoryRecyclerAdapter(
             val textView = itemView.findViewById<TextView>(R.id.textView_categoryName)
 
             if(categoryModel.image != ""){
-                Firebase.storage.reference.child("categories/milk.png").downloadUrl.addOnSuccessListener {
-                    Picasso
-                        .get()
-                        .load(it)
-                        .into(imageView);
-//                    Glide
-//                        .with(imageView.context)
-//                        .load(it)
-//                        .into(imageView)
-                }.addOnFailureListener {
-                    Log.e("div", "HomeFragmentCategoryRecyclerAdapter L65 $it")
-                }
+                ImageLoading().loadImage(categoryModel.image, imageView)
             }
 
 

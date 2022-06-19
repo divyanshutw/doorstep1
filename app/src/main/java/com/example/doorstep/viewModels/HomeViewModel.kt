@@ -35,6 +35,8 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
     private val _address_List = MutableLiveData<ArrayList<Map<String,Objects>>>()
     val addressList:LiveData<ArrayList<Map<String,Objects>>> = _address_List
 
+    val isLoadingDialogVisible = MutableLiveData<Boolean>(false)
+
     var user:DocumentSnapshot? = null
 
     private lateinit var firestore: FirebaseFirestore
@@ -43,15 +45,34 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
 
     init {
         firestore = FirebaseFirestore.getInstance()
+        loadFavoritesAndAddress()
+        viewModelScope.launch {
+            fetchProducts("All Products")
+            fetchCategories()
+        }
+    }
+
+    fun loadFavoritesAndAddress(){
         viewModelScope.launch {
             fetchFavoritesAndAddress()
-            fetchProducts("all")
+        }
+    }
+
+    fun loadProducts(category:String){
+        viewModelScope.launch {
+            fetchProducts(category)
+        }
+    }
+
+    fun loadCategories(){
+        viewModelScope.launch {
             fetchCategories()
         }
     }
 
     private suspend fun fetchFavoritesAndAddress() {
         Log.d("div","HomeViewModel L50 ${_favoritesList.value}")
+        isLoadingDialogVisible.value = true
         withContext(Dispatchers.IO){
             val uid = Firebase.auth.currentUser?.uid
             Log.d("div", "HomeViewModel L46 $uid")
@@ -66,9 +87,11 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
 
                         if(it.get("address")!=null)
                             _address_List.value=it.get("address") as ArrayList<Map<String, Objects>>
+                        isLoadingDialogVisible.value = false
                     }.addOnFailureListener {
                         Log.e("div", "HomeViewModel L60 ${it.message}")
-                        Log.d("div", "HomeViewModel L50 ${_favoritesList.value?.get(0)}")
+                        Log.e("div", "HomeViewModel L50 ${_favoritesList.value?.get(0)}")
+                        isLoadingDialogVisible.value = false
                     }
             }
         }
@@ -77,20 +100,24 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
     fun toggleFavorite(){
         val uid = Firebase.auth.currentUser?.uid
         if(uid != null){
+            isLoadingDialogVisible.value = true
             FirebaseFirestore.getInstance().collection("Customers").document(uid).set(
                 hashMapOf("favorites" to favoritesList.value), SetOptions.merge())
                 .addOnSuccessListener {
                     Log.d("div", "HomeViewModel L66 favorites updated")
+                    isLoadingDialogVisible.value = false
                 }.addOnFailureListener {
                     Log.d("div", "HomeViewModel L68 $it")
+                    isLoadingDialogVisible.value = false
                 }
         }
     }
 
     private suspend fun fetchCategories() {
+        isLoadingDialogVisible.value = true
         withContext(Dispatchers.IO){
             var list = arrayListOf<CategoryModel>()
-            list.add(CategoryModel("0", "All Porducts", "", true))
+            list.add(CategoryModel("0", "All Products", "", true))
             FirebaseFirestore.getInstance().collection("Categories").get()
                 .addOnSuccessListener {
                     for(document in it){
@@ -98,8 +125,10 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
                         list.add(CategoryModel(document.id, document.getString("name").toString(), document.getString("image").toString(), false))
                     }
                     _categoriesList.value = list
+                    isLoadingDialogVisible.value = false
                 }.addOnFailureListener {
                     Log.e("div", "HomeViewModel L69 $it")
+                    isLoadingDialogVisible.value = false
                 }
         }
     }
@@ -111,10 +140,12 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
     }
 
     private suspend fun fetchProducts(category: String) {
+        isLoadingDialogVisible.value = true
         withContext(Dispatchers.IO) {
             Log.d("div", "HomeViewModel L74 $category")
+
             var list = arrayListOf<ProductModel>()
-            val documentList = if (category == "all")
+            val documentList = if (category == "All Products")
                 FirebaseFirestore.getInstance().collection("Products")
             else
                 FirebaseFirestore.getInstance().collection("Products").whereEqualTo("category", category)
@@ -141,8 +172,10 @@ class HomeViewModel(application: Application): AndroidViewModel(application){
 
                     }
                     _productsList.value = list
+                    isLoadingDialogVisible.value = false
                 }.addOnFailureListener {
                     Log.e("div", "HomeViewModel L99 $it")
+                    isLoadingDialogVisible.value = false
                 }
         }
     }

@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="10dp"
         android:elevation="8dp"
         android:background="@drawable/product_bg"
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="130dp"
             android:scaleType="fitXY"
-            android:src="@drawable/carrots"
+            android:src="@drawable/logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

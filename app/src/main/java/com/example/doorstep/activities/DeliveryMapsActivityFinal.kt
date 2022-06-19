@@ -4,9 +4,12 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.doorstep.MainActivity
 import com.example.doorstep.R
 import com.example.doorstep.databinding.ActivityDeliveryMapsBinding
+import com.example.doorstep.utilities.Dialogs
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -31,6 +34,7 @@ import kotlin.collections.HashMap
 class DeliveryMapsActivityFinal : FragmentActivity(), OnMapReadyCallback {
     private var mMap: GoogleMap? = null
     private var binding: ActivityDeliveryMapsBinding? = null
+    private var isLoadingDialogVisible = MutableLiveData<Boolean>(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDeliveryMapsBinding.inflate(layoutInflater)
@@ -40,6 +44,19 @@ class DeliveryMapsActivityFinal : FragmentActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
+
+        initObservers()
+    }
+
+    private fun initObservers() {
+        isLoadingDialogVisible.observe(this){
+            if(it != null){
+                if(it){
+                    val dialogs = Dialogs(this, this)
+                    dialogs.showLoadingDialog(isLoadingDialogVisible)
+                }
+            }
+        }
     }
 
     /**
@@ -115,9 +132,9 @@ class DeliveryMapsActivityFinal : FragmentActivity(), OnMapReadyCallback {
     private fun getAddress(){
          val firebaseFirestore =FirebaseFirestore.getInstance()
         val auth=FirebaseAuth.getInstance()
-        auth.currentUser?.let { firebaseFirestore.collection("Customers").document(it.uid).get().addOnSuccessListener(
-            OnSuccessListener {
-
+        isLoadingDialogVisible.value = true
+        auth.currentUser?.let { firebaseFirestore.collection("Customers").document(it.uid).get()
+            .addOnSuccessListener {
                 var map = java.util.HashMap<String, Objects>()
                 map= it.getData() as HashMap<String, Objects>
                 Log.e("Main Activity",map.toString())
@@ -125,13 +142,17 @@ class DeliveryMapsActivityFinal : FragmentActivity(), OnMapReadyCallback {
                 list=map["address"] as ArrayList<HashMap<String, Objects>>
                 Log.e("MOFO",list.toString())
                 requestJsonFromDirectionAPI(list[0]["AddressLine"].toString() )
-
-
-            }) }
+                isLoadingDialogVisible.value = false
+            }
+            .addOnFailureListener {
+                isLoadingDialogVisible.value = false
+            }
+        }
 
     }
 
     private fun requestJsonFromDirectionAPI(origin:String) {
+        isLoadingDialogVisible.value = true
         val client = OkHttpClient()
         val request = Request.Builder()
             .url("https://maps.googleapis.com/maps/api/directions/json?origin=$origin&destination=183, GS Rd, Dispur, Christian Basti, Guwahati, Assam 781005&key=AIzaSyDwnoXcQJ47WErq1rInr3cYS5Z1vEC6FEg")
@@ -149,9 +170,11 @@ class DeliveryMapsActivityFinal : FragmentActivity(), OnMapReadyCallback {
                 runOnUiThread(Runnable { changeUI(jsonTemp) })
 
                 Log.e("DeliveryMapsActivity1", json.toString())
+                isLoadingDialogVisible.value = false
 
             } catch (e: IOException) {
                 Log.e("DeliveryMapsActivity", e.message!!)
+                isLoadingDialogVisible.value = false
             }
         }
 

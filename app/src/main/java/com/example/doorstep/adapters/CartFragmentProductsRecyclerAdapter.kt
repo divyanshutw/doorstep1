@@ -1,5 +1,6 @@
 package com.example.doorstep.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.doorstep.R
 import com.example.doorstep.models.CartModel
+import com.example.doorstep.utilities.ImageLoading
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
 
 class CartFragmentProductsRecyclerAdapter (
     var itemList: List<CartModel>,
@@ -27,14 +32,6 @@ class CartFragmentProductsRecyclerAdapter (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        Glide.with(holder.itemView.context)
-//            .load(itemList[position].url)
-//            .apply(
-//                RequestOptions()
-//                    .placeholder(R.drawable.loading_animation)
-//                    .error(R.drawable.ic_broken_image)
-//            )
-//            .into(holder.itemView.confettiImageView)
         holder.bind(itemList[position])
     }
 
@@ -64,11 +61,14 @@ class CartFragmentProductsRecyclerAdapter (
             val textViewCategory = itemView.findViewById<TextView>(R.id.textView_category)
             val textViewPrice = itemView.findViewById<TextView>(R.id.textView_price)
             val textViewQuantity = itemView.findViewById<TextView>(R.id.textView_quantity)
-//            imageView.setImageResource((productModel.productImage).toInt())
             imageView.setImageResource(R.drawable.carrots)
             textViewItemHeading.text = cartModel.productTitle
             textViewPrice.text = cartModel.currentPrice
             textViewQuantity.text = cartModel.quantity.toString()
+
+            if(cartModel.productImage != null && cartModel.productImage != ""){
+                ImageLoading().loadImage(cartModel.productImage!!, imageView)
+            }
 
         }
     }

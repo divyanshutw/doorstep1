@@ -13,6 +13,7 @@ import com.example.doorstep.R
 import com.example.doorstep.activities.PaymentActivityFinal
 import com.example.doorstep.adapters.CartFragmentProductsRecyclerAdapter
 import com.example.doorstep.databinding.FragmentCartBinding
+import com.example.doorstep.utilities.Dialogs
 import com.example.doorstep.viewModels.CartViewModel
 
 
@@ -80,6 +81,15 @@ class CartFragment : Fragment(), CartFragmentProductsRecyclerAdapter.CartItemLis
         viewModel.totalPrice.observe(viewLifecycleOwner){
             if(viewModel.totalPrice.value!=null){
                 binding.textViewTotalAmount.text = viewModel.totalPrice.value.toString()!!
+            }
+        }
+
+        viewModel.isLoadingDialogVisible.observe(viewLifecycleOwner){
+            if(it != null){
+                if(it){
+                    val dialogs = Dialogs(requireContext(), viewLifecycleOwner)
+                    dialogs.showLoadingDialog(viewModel.isLoadingDialogVisible)
+                }
             }
         }
     }

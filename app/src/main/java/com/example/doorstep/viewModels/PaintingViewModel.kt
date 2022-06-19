@@ -11,8 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 
 class PaintingViewModel : ViewModel() {
     private val viewModelJob = Job()
@@ -21,13 +19,22 @@ class PaintingViewModel : ViewModel() {
     private val _ordersList = MutableLiveData<ArrayList<OrdersModel>>()
     val ordersList:LiveData<ArrayList<OrdersModel>> = _ordersList
 
+    val isLoadingDialogVisible = MutableLiveData<Boolean>(false)
+
     init{
         viewModelScope.launch {
-            loadOrders()
+            fetchOrders()
         }
     }
 
-    private suspend fun loadOrders() {
+    fun loadOrders(){
+        viewModelScope.launch {
+            fetchOrders()
+        }
+    }
+
+    private suspend fun fetchOrders() {
+        isLoadingDialogVisible.value = true
         withContext(Dispatchers.IO){
             Log.d("div", "OrdersViewModel L28 ${Firebase.auth.currentUser!!.uid}")
             FirebaseFirestore.getInstance()
@@ -54,9 +61,11 @@ class PaintingViewModel : ViewModel() {
                     }
                     _ordersList.value = list
                     Log.d("div", "OrdersViewModel L51 ${_ordersList.value!!.size}")
+                    isLoadingDialogVisible.value = false
                 }
                 .addOnFailureListener {
                     Log.e("div", "OrdersViewModel L37 $it")
+                    isLoadingDialogVisible.value = false
                 }
         }
     }

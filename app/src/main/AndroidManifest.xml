@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.doorstep">
+    package="com.doorstep24.doorstep">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission. ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,13 +17,16 @@
         android:largeHeap="true">
         <activity
             android:name=".activities.OrderProductsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.CartActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.PaymentActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -42,29 +45,36 @@
         <activity
             android:name=".activities.MapsActivityFinal"
             android:exported="false"
-            android:label="@string/title_activity_maps_final" />
+            android:label="@string/title_activity_maps_final"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.DeliveryMapsActivityFinal"
             android:exported="false"
-            android:label="DeliveryMapsActivityfinal" />
+            android:label="DeliveryMapsActivityfinal"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.MapsActivity"
             android:exported="false"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.CustomerHomeActivity"
             android:exported="false"
-            android:label="@string/title_activity_customer_home" />
+            android:label="@string/title_activity_customer_home"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.PaymentActivityFinal"
             android:exported="false"
-            android:label="Payments Activity Final" />
+            android:label="Payments Activity Final"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -15,7 +15,7 @@ android {
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.doorstep"
+        applicationId "com.doorstep24.doorstep"
         minSdk 21
         targetSdk 32
         versionCode 1
@@ -114,4 +114,5 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:4.13.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
+
 }

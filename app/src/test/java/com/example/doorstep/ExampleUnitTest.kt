@@ -1,4 +1,4 @@
-package com.example.doorstep
+package com.doorstep24.doorstep
 
 import org.junit.Test
 
